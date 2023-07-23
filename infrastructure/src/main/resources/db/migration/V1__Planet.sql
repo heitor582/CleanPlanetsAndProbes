@@ -1,0 +1,8 @@
+CREATE TABLE planets(
+   id SERIAL NOT NULL PRIMARY KEY,
+   name VARCHAR(255) NOT NULL,
+   cord_x INTEGER NOT NULL,
+   cord_Y INTEGER NOT NULL,
+   created_at DATETIME(6) NOT NULL,
+   updated_at DATETIME(6) NOT NULL
+);

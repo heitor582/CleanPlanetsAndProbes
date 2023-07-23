@@ -1,0 +1,11 @@
+postgresql:
+  username: ${DATABASE_POSTGRESQL_USERNAME:planets_probe}
+  password: ${DATABASE_POSTGRESQL_PASSWORD:123456}
+  schema: ${DATABASE_POSTGRESQL_SCHEMA:planets_probe}
+  url: ${DATABASE_POSTGRESQL_URL:localhost:5432}
+
+spring:
+  jpa:
+    show-sql: false
+    hibernate:
+      ddl-auto: none

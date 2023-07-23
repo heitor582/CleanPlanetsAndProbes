@@ -1,0 +1,29 @@
+version: '3.7'
+services:
+  planets_probe:
+    container_name: planets_probe
+    build:
+      context: ./
+    ports:
+      - "8080:8080"
+    depends_on:
+      - postgres
+    environment:
+      DATABASE_POSTGRESQL_USERNAME: planets_probe
+      DATABASE_POSTGRESQL_PASSWORD: planets_probe
+      DATABASE_POSTGRESQL_SCHEMA: planets_probe
+      DATABASE_POSTGRESQL_URL: postgres:5432
+      PORT: 8080
+  postgres:
+    image: postgres
+    container_name: postgres
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_USER: planets_probe
+      POSTGRES_PASSWORD: planets_probe
+      POSTGRES_DB: planets_probe
+
+networks:
+  default:
+    driver: bridge

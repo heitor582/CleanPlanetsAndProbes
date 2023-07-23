@@ -1,0 +1,12 @@
+postgresql:
+  username: planets_probe
+  password: 123456
+  schema: planets_probe
+  url: localhost:5432
+
+server:
+  port: 8080
+  undertow:
+    threads:
+      worker: 10 # at least 10 per cpu
+      io: 2 # one io per cpu
