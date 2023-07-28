@@ -2,6 +2,7 @@ package com.study.infrastructure.planet.persistence;
 
 import com.study.domain.planet.Planet;
 import com.study.domain.planet.PlanetID;
+import com.study.infrastructure.configuration.GeneratedJpaOnly;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -28,6 +29,7 @@ public class PlanetJpaEntity {
     @Column(name = "updated_at", nullable = false, columnDefinition = "DATETIME(6)")
     private Instant updatedAt;
 
+    @GeneratedJpaOnly
     public PlanetJpaEntity() {
     }
 
@@ -72,53 +74,23 @@ public class PlanetJpaEntity {
         return id;
     }
 
-    public PlanetJpaEntity setId(final Long id) {
-        this.id = id;
-        return this;
-    }
-
     public String getName() {
         return name;
-    }
-
-    public PlanetJpaEntity setName(final String name) {
-        this.name = name;
-        return this;
     }
 
     public int getCordY() {
         return cordY;
     }
 
-    public PlanetJpaEntity setCordY(final int cordY) {
-        this.cordY = cordY;
-        return this;
-    }
-
     public int getCordX() {
         return cordX;
-    }
-
-    public PlanetJpaEntity setCordX(final int cordX) {
-        this.cordX = cordX;
-        return this;
     }
 
     public Instant getCreatedAt() {
         return createdAt;
     }
 
-    public PlanetJpaEntity setCreatedAt(final Instant createdAt) {
-        this.createdAt = createdAt;
-        return this;
-    }
-
     public Instant getUpdatedAt() {
         return updatedAt;
-    }
-
-    public PlanetJpaEntity setUpdatedAt(final Instant updatedAt) {
-        this.updatedAt = updatedAt;
-        return this;
     }
 }

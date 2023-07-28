@@ -3,6 +3,7 @@ package com.study.infrastructure.probe.persistence;
 import com.study.domain.probe.Direction;
 import com.study.domain.probe.Probe;
 import com.study.domain.probe.ProbeID;
+import com.study.infrastructure.configuration.GeneratedJpaOnly;
 import com.study.infrastructure.planet.persistence.PlanetJpaEntity;
 
 import javax.persistence.Column;
@@ -40,6 +41,7 @@ public class ProbeJpaEntity {
     @Column(name = "updated_at", nullable = false, columnDefinition = "DATETIME(6)")
     private Instant updatedAt;
 
+    @GeneratedJpaOnly
     public ProbeJpaEntity() {
     }
 

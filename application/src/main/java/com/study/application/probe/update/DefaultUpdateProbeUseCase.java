@@ -8,11 +8,13 @@ import com.study.domain.probe.ProbeGateway;
 import com.study.domain.probe.ProbeID;
 import com.study.domain.validation.handler.Notification;
 
+import java.util.Objects;
+
 public class DefaultUpdateProbeUseCase extends UpdateProbeUseCase{
     private final ProbeGateway probeGateway;
 
     public DefaultUpdateProbeUseCase(final ProbeGateway probeGateway) {
-        this.probeGateway = probeGateway;
+        this.probeGateway = Objects.requireNonNull(probeGateway);
     }
 
 

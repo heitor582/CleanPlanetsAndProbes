@@ -32,11 +32,6 @@ public class Planet extends AggregateRoot<PlanetID> {
         selfValidate();
     }
 
-    public static Planet newPlanet(final int cordY, final int cordX, final String name) {
-        final Instant now = Instant.now();
-        return new Planet(PlanetID.from(0L), cordY, cordX, name, now, now);
-    }
-
     public static Planet with(
             final PlanetID id, final int cordY, final int cordX,
             final String name, final Instant createdAt, final Instant updatedAt
@@ -49,6 +44,11 @@ public class Planet extends AggregateRoot<PlanetID> {
                 createdAt,
                 updatedAt
         );
+    }
+
+    public static Planet newPlanet(final int cordY, final int cordX, final String name) {
+        final Instant now = Instant.now();
+        return Planet.with(PlanetID.from(0L), cordY, cordX, name, now, now);
     }
 
     public int getCordY() {

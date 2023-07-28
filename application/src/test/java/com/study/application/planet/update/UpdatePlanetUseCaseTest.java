@@ -51,15 +51,17 @@ class UpdatePlanetUseCaseTest extends UseCaseTest {
         when(gateway.findBy(expectedId)).thenReturn(Optional.of(planet));
         when(gateway.update(any())).thenAnswer(returnsFirstArg());
 
-        useCase.execute(command);
+        final var output = useCase.execute(command);
 
-        verify(gateway).update(argThat(member ->
-                Objects.equals(expectedId, member.getId())
-                        && Objects.equals(expectedName, member.getName())
-                        && Objects.equals(expectedCordX, planet.getCordX())
-                        && Objects.equals(expectedCordY, planet.getCordY())
-                        && Objects.equals(expectedCreatedAt, member.getCreatedAt())
-                        && member.getUpdatedAt().isAfter(updatedAt)
+        assertEquals(output.id(), expectedId.getValue());
+
+        verify(gateway).update(argThat(cmd ->
+                Objects.equals(expectedId, cmd.getId())
+                        && Objects.equals(expectedName, cmd.getName())
+                        && Objects.equals(expectedCordX, cmd.getCordX())
+                        && Objects.equals(expectedCordY, cmd.getCordY())
+                        && Objects.equals(expectedCreatedAt, cmd.getCreatedAt())
+                        && cmd.getUpdatedAt().isAfter(updatedAt)
         ));
     }
 

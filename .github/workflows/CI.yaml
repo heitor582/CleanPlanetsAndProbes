@@ -1,0 +1,26 @@
+name: CI
+
+on:
+  push:
+    branches:
+      - '**'
+
+jobs:
+  test:
+    name: Test
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        java_version: ['17']
+    steps:
+      - uses: actions/checkout@v1
+      - name: Set JDK
+        uses: actions/setup-java@v1
+        with:
+          java-version: '${{matrix.java_version}}'
+      - name: Execute unit tests
+        run: ./gradlew unitTests
+      - name: Execute integration tests
+        run: ./gradlew integrationTests
+      - name: Execute E2E tests
+        run: ./gradlew e2eTests

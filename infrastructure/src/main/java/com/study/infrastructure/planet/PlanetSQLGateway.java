@@ -20,7 +20,7 @@ import java.util.Optional;
 public class PlanetSQLGateway implements PlanetGateway {
     private final PlanetRepository repository;
 
-    public PlanetSQLGateway(final PlanetRepository repository) {
+    PlanetSQLGateway(final PlanetRepository repository) {
         this.repository = Objects.requireNonNull(repository);
     }
 

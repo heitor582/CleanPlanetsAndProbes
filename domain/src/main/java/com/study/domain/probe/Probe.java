@@ -41,16 +41,6 @@ public class Probe extends AggregateRoot<ProbeID> {
         selfValidate();
     }
 
-    public static Probe newProbe(
-            final String name,
-            final int cordX,
-            final int cordY,
-            final Planet planet
-    ) {
-        final Instant now = InstantUtils.now();
-        return new Probe(ProbeID.from(0L), cordX, cordY, name, Direction.UP, planet, now, now);
-    }
-
     public static Probe with(
             final ProbeID probeID,
             final int cordX,
@@ -61,6 +51,16 @@ public class Probe extends AggregateRoot<ProbeID> {
             final Instant createdAt,
             final Instant updatedAt) {
         return new Probe(probeID, cordX, cordY, name, direction, planet, createdAt, updatedAt);
+    }
+
+    public static Probe newProbe(
+            final String name,
+            final int cordX,
+            final int cordY,
+            final Planet planet
+    ) {
+        final Instant now = InstantUtils.now();
+        return Probe.with(ProbeID.from(0L), cordX, cordY, name, Direction.UP, planet, now, now);
     }
 
     @Override
