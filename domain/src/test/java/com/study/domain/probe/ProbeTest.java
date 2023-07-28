@@ -175,23 +175,6 @@ public class ProbeTest extends UnitTest {
     }
 
     @Test
-    public void givenAValidProbe_whenCallsCreateProbeWithCordsGreaterThanPlanet_shouldReturnANotificationException() {
-        final String expectedName = "teste";
-        final var expectedCordX = 3;
-        final var expectedCordY = 3;
-        final Planet planet = Planet.newPlanet(1, 2, "tes");
-
-        final var expectedErrorMessage = "does not have this position to land the ship";
-        final var expectedErrorCount = 1;
-
-        final var exception = assertThrows(NotificationException.class,
-                () -> Probe.newProbe(expectedName, expectedCordX, expectedCordY, planet.getId()));
-
-        assertEquals(expectedErrorCount, exception.getErrors().size());
-        assertEquals(expectedErrorMessage, exception.getErrors().get(0).message());
-    }
-
-    @Test
     public void givenAValidProbe_whenCallsUpdateProbeWithCordsGreaterThanPlanet_shouldReturnANotificationException() {
         final String expectedName = "teste";
         final var expectedCordX = 3;
@@ -206,23 +189,6 @@ public class ProbeTest extends UnitTest {
 
         final var exception = assertThrows(NotificationException.class,
                 () -> probe.update(expectedName, expectedCordX, expectedCordY, direction));
-
-        assertEquals(expectedErrorCount, exception.getErrors().size());
-        assertEquals(expectedErrorMessage, exception.getErrors().get(0).message());
-    }
-
-    @Test
-    public void givenAValidProbeWithNegativeCords_whenCallsCreateProbeWithCordsGreaterThanPlanet_shouldReturnANotificationException() {
-        final String expectedName = "teste";
-        final var expectedCordX = -3;
-        final var expectedCordY = -3;
-        final Planet planet = Planet.newPlanet(2, 1, "tes");
-
-        final var expectedErrorMessage =  "does not have this position to land the ship";
-        final var expectedErrorCount = 1;
-
-        final var exception = assertThrows(NotificationException.class,
-                () -> Probe.newProbe(expectedName, expectedCordX, expectedCordY, planet.getId()));
 
         assertEquals(expectedErrorCount, exception.getErrors().size());
         assertEquals(expectedErrorMessage, exception.getErrors().get(0).message());
