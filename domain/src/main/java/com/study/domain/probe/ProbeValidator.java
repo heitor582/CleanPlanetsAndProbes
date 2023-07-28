@@ -20,7 +20,6 @@ public class ProbeValidator extends Validator {
     public void validate() {
         checkNameConstraints();
         checkDirectionConstraints();
-        checkCordsConstraints();
     }
 
     private void checkNameConstraints() {
@@ -46,13 +45,6 @@ public class ProbeValidator extends Validator {
     private void checkDirectionConstraints() {
         if(this.probe.getDirection() == null){
             this.validationHandler().append(new Error("direction should not be null"));
-        }
-    }
-
-    private void checkCordsConstraints() {
-        final Planet planet = this.probe.getPlanet();
-        if(planet.getCordX() < Math.abs(this.probe.getCordX()) || planet.getCordY() < Math.abs(this.probe.getCordY())){
-            this.validationHandler().append(new Error("does not have this position to land the ship"));
         }
     }
 }

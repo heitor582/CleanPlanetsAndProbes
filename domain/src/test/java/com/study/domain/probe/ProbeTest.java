@@ -18,7 +18,7 @@ public class ProbeTest {
         final Direction expectedDirection = Direction.UP;
         final Planet planet = Planet.newPlanet(3, 5, "tes");
 
-        final var probe = Probe.newProbe(expectedName, expectedCordX, expectedCordY, planet);
+        final var probe = Probe.newProbe(expectedName, expectedCordX, expectedCordY, planet.getId());
 
         assertNotNull(probe);
         assertNotNull(probe.getId());
@@ -27,7 +27,7 @@ public class ProbeTest {
         assertEquals(expectedCordX, probe.getCordX());
         assertEquals(expectedCordY, probe.getCordY());
         assertEquals(expectedDirection, probe.getDirection());
-        assertEquals(planet.getId(), probe.getPlanet().getId());
+        assertEquals(planet.getId(), probe.getPlanetId());
         assertNotNull(probe.getCreatedAt());
         assertNotNull(probe.getUpdatedAt());
         assertEquals(probe.getCreatedAt(), probe.getUpdatedAt());
@@ -44,7 +44,7 @@ public class ProbeTest {
         final var expectedErrorCount = 1;
 
         final var exception = assertThrows(NotificationException.class,
-                () -> Probe.newProbe(expectedName, expectedCordX, expectedCordY, planet));
+                () -> Probe.newProbe(expectedName, expectedCordX, expectedCordY, planet.getId()));
 
         assertEquals(expectedErrorCount, exception.getErrors().size());
         assertEquals(expectedErrorMessage, exception.getErrors().get(0).message());
@@ -61,7 +61,7 @@ public class ProbeTest {
         final var expectedErrorCount = 1;
 
         final var exception = assertThrows(NotificationException.class,
-                () -> Probe.newProbe(expectedName, expectedCordX, expectedCordY, planet));
+                () -> Probe.newProbe(expectedName, expectedCordX, expectedCordY, planet.getId()));
 
         assertEquals(expectedErrorCount, exception.getErrors().size());
         assertEquals(expectedErrorMessage, exception.getErrors().get(0).message());
@@ -84,7 +84,7 @@ public class ProbeTest {
         final var expectedErrorCount = 1;
 
         final var exception = assertThrows(NotificationException.class,
-                () -> Probe.newProbe(expectedName, expectedCordX, expectedCordY, planet));
+                () -> Probe.newProbe(expectedName, expectedCordX, expectedCordY, planet.getId()));
 
         assertEquals(expectedErrorCount, exception.getErrors().size());
         assertEquals(expectedErrorMessage, exception.getErrors().get(0).message());
@@ -101,7 +101,7 @@ public class ProbeTest {
         final var expectedErrorCount = 1;
 
         final var exception = assertThrows(NotificationException.class,
-                () -> Probe.newProbe(expectedName, expectedCordX, expectedCordY, planet));
+                () -> Probe.newProbe(expectedName, expectedCordX, expectedCordY, planet.getId()));
 
         assertEquals(expectedErrorCount, exception.getErrors().size());
         assertEquals(expectedErrorMessage, exception.getErrors().get(0).message());
@@ -115,7 +115,7 @@ public class ProbeTest {
         final Planet planet = Planet.newPlanet(3, 3, "tes");
         final Direction direction = Direction.DOWN;
 
-        final var probe = Probe.newProbe("tes", 1, 2, planet);
+        final var probe = Probe.newProbe("tes", 1, 2, planet.getId());
         final var expectedCreatedAt = probe.getCreatedAt();
         final var expectedUpdatedAt = probe.getUpdatedAt();
 
@@ -127,7 +127,7 @@ public class ProbeTest {
         assertEquals(expectedName, probe.getName());
         assertEquals(expectedCordX, probe.getCordX());
         assertEquals(expectedCordY, probe.getCordY());
-        assertEquals(planet.getId(), probe.getPlanet().getId());
+        assertEquals(planet.getId(), probe.getPlanetId());
         assertEquals(direction, probe.getDirection());
         assertEquals(expectedCreatedAt, probe.getCreatedAt());
         assertTrue(probe.getUpdatedAt().isAfter(expectedUpdatedAt));
@@ -144,7 +144,7 @@ public class ProbeTest {
         final var expectedErrorMessage =  "name should not be null";
         final var expectedErrorCount = 1;
 
-        final var probe = Probe.newProbe("tes", 1, 2, planet);
+        final var probe = Probe.newProbe("tes", 1, 2, planet.getId());
 
         final var exception = assertThrows(NotificationException.class,
                 () -> probe.update(expectedName, expectedCordX, expectedCordY, direction));
@@ -164,7 +164,7 @@ public class ProbeTest {
         final var expectedErrorMessage =  "direction should not be null";
         final var expectedErrorCount = 1;
 
-        final var probe = Probe.newProbe("tes", 1, 2, planet);
+        final var probe = Probe.newProbe("tes", 1, 2, planet.getId());
 
         final var exception = assertThrows(NotificationException.class,
                 () -> probe.update(expectedName, expectedCordX, expectedCordY, direction));
@@ -184,7 +184,7 @@ public class ProbeTest {
         final var expectedErrorCount = 1;
 
         final var exception = assertThrows(NotificationException.class,
-                () -> Probe.newProbe(expectedName, expectedCordX, expectedCordY, planet));
+                () -> Probe.newProbe(expectedName, expectedCordX, expectedCordY, planet.getId()));
 
         assertEquals(expectedErrorCount, exception.getErrors().size());
         assertEquals(expectedErrorMessage, exception.getErrors().get(0).message());
@@ -201,7 +201,7 @@ public class ProbeTest {
         final var expectedErrorMessage =  "does not have this position to land the ship";
         final var expectedErrorCount = 1;
 
-        final var probe = Probe.newProbe("tes", 1, 2, planet);
+        final var probe = Probe.newProbe("tes", 1, 2, planet.getId());
 
         final var exception = assertThrows(NotificationException.class,
                 () -> probe.update(expectedName, expectedCordX, expectedCordY, direction));
@@ -221,7 +221,7 @@ public class ProbeTest {
         final var expectedErrorCount = 1;
 
         final var exception = assertThrows(NotificationException.class,
-                () -> Probe.newProbe(expectedName, expectedCordX, expectedCordY, planet));
+                () -> Probe.newProbe(expectedName, expectedCordX, expectedCordY, planet.getId()));
 
         assertEquals(expectedErrorCount, exception.getErrors().size());
         assertEquals(expectedErrorMessage, exception.getErrors().get(0).message());
@@ -235,7 +235,7 @@ public class ProbeTest {
         final Planet planet = Planet.newPlanet(3, 3, "tes");
         final Direction expectedDirection = Direction.UP;
 
-        final var probe = Probe.newProbe(expectedName, expectedCordX, expectedCordY, planet);
+        final var probe = Probe.newProbe(expectedName, expectedCordX, expectedCordY, planet.getId());
 
         assertNotNull(probe);
         assertNotNull(probe.getId());
@@ -244,7 +244,7 @@ public class ProbeTest {
         assertEquals(expectedCordX, probe.getCordX());
         assertEquals(expectedCordY, probe.getCordY());
         assertEquals(expectedDirection, probe.getDirection());
-        assertEquals(planet.getId(), probe.getPlanet().getId());
+        assertEquals(planet.getId(), probe.getPlanetId());
         assertNotNull(probe.getCreatedAt());
         assertNotNull(probe.getUpdatedAt());
         assertEquals(probe.getCreatedAt(), probe.getUpdatedAt());

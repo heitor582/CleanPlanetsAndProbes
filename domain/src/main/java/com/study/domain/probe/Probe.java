@@ -2,7 +2,7 @@ package com.study.domain.probe;
 
 import com.study.domain.AggregateRoot;
 import com.study.domain.exceptions.NotificationException;
-import com.study.domain.planet.Planet;
+import com.study.domain.planet.PlanetID;
 import com.study.domain.utils.InstantUtils;
 import com.study.domain.validation.ValidationHandler;
 import com.study.domain.validation.handler.Notification;
@@ -16,7 +16,7 @@ public class Probe extends AggregateRoot<ProbeID> {
     private int cordY;
     private String name;
     private Direction direction;
-    private final Planet planet;
+    private final PlanetID planetId;
     private final Instant createdAt;
     private Instant updatedAt;
 
@@ -26,7 +26,7 @@ public class Probe extends AggregateRoot<ProbeID> {
             final int cordY,
             final String name,
             final Direction direction,
-            final Planet planet,
+            final PlanetID planetId,
             final Instant createdAt,
             final Instant updatedAt) {
         super(probeID);
@@ -34,7 +34,7 @@ public class Probe extends AggregateRoot<ProbeID> {
         this.cordY = cordY;
         this.name = name;
         this.direction = direction;
-        this.planet = Objects.requireNonNull(planet);
+        this.planetId = Objects.requireNonNull(planetId);
         this.createdAt = Objects.requireNonNull(createdAt);
         this.updatedAt = Objects.requireNonNull(updatedAt);
 
@@ -47,20 +47,20 @@ public class Probe extends AggregateRoot<ProbeID> {
             final int cordY,
             final String name,
             final Direction direction,
-            final Planet planet,
+            final PlanetID planetId,
             final Instant createdAt,
             final Instant updatedAt) {
-        return new Probe(probeID, cordX, cordY, name, direction, planet, createdAt, updatedAt);
+        return new Probe(probeID, cordX, cordY, name, direction, planetId, createdAt, updatedAt);
     }
 
     public static Probe newProbe(
             final String name,
             final int cordX,
             final int cordY,
-            final Planet planet
+            final PlanetID planetId
     ) {
         final Instant now = InstantUtils.now();
-        return Probe.with(ProbeID.from(0L), cordX, cordY, name, Direction.UP, planet, now, now);
+        return Probe.with(ProbeID.from(0L), cordX, cordY, name, Direction.UP, planetId, now, now);
     }
 
     @Override
@@ -84,8 +84,8 @@ public class Probe extends AggregateRoot<ProbeID> {
         return direction;
     }
 
-    public Planet getPlanet() {
-        return planet;
+    public PlanetID getPlanetId() {
+        return planetId;
     }
 
     public Instant getCreatedAt() {

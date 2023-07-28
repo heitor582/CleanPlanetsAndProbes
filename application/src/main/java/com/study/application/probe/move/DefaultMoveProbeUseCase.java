@@ -28,8 +28,9 @@ public class DefaultMoveProbeUseCase extends MoveProbeUseCase{
         final Probe probe = this.probeGateway
                 .findBy(probeID).orElseThrow(() -> NotFoundException.with(Probe.class, probeID));
 
-        final Planet planet = probe.getPlanet();
-        final PlanetID planetID = planet.getId();
+        final PlanetID planetID = probe.getPlanetId();
+        final Planet planet = this.planetGateway
+                .findBy(planetID).orElseThrow(() -> NotFoundException.with(Planet.class, planetID));
 
         final List<Probe> probesByPlanetId = this.probeGateway.findAllByPlanetId(planetID);
 
