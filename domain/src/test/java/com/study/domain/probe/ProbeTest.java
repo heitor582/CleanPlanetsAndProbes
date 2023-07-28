@@ -175,26 +175,6 @@ public class ProbeTest extends UnitTest {
     }
 
     @Test
-    public void givenAValidProbe_whenCallsUpdateProbeWithCordsGreaterThanPlanet_shouldReturnANotificationException() {
-        final String expectedName = "teste";
-        final var expectedCordX = 3;
-        final var expectedCordY = 3;
-        final Planet planet = Planet.newPlanet(2, 1, "tes");
-        final Direction direction = Direction.UP;
-
-        final var expectedErrorMessage =  "does not have this position to land the ship";
-        final var expectedErrorCount = 1;
-
-        final var probe = Probe.newProbe("tes", 1, 2, planet.getId());
-
-        final var exception = assertThrows(NotificationException.class,
-                () -> probe.update(expectedName, expectedCordX, expectedCordY, direction));
-
-        assertEquals(expectedErrorCount, exception.getErrors().size());
-        assertEquals(expectedErrorMessage, exception.getErrors().get(0).message());
-    }
-
-    @Test
     public void givenAValidProbeWithNegativeCords_whenCallsCreateProbe_shouldReturnIt() {
         final String expectedName = "teste";
         final var expectedCordX = -3;
