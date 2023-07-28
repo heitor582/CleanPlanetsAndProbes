@@ -1,5 +1,6 @@
 package com.study.domain.planet;
 
+import com.study.domain.UnitTest;
 import com.study.domain.exceptions.NotificationException;
 import org.junit.jupiter.api.Test;
 
@@ -8,7 +9,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-public class PlanetTest {
+public class PlanetTest extends UnitTest {
 
     @Test
     public void givenAValidParams_whenCallsNewPlanet_thenInstantiateIt() {
