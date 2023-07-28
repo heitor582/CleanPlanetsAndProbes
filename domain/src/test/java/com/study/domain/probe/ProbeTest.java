@@ -1,5 +1,6 @@
 package com.study.domain.probe;
 
+import com.study.domain.UnitTest;
 import com.study.domain.exceptions.NotificationException;
 import com.study.domain.planet.Planet;
 import org.junit.jupiter.api.Test;
@@ -9,7 +10,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-public class ProbeTest {
+public class ProbeTest extends UnitTest {
     @Test
     public void givenAValidParams_whenCallsNewProbe_thenInstantiateIt() {
         final String expectedName = "teste";
