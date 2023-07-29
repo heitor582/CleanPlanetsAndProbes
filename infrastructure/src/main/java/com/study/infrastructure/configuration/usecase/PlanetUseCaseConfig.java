@@ -25,7 +25,7 @@ public class PlanetUseCaseConfig {
     }
 
     @Bean
-    public CreatePlanetUseCase createProbeUseCase() {
+    public CreatePlanetUseCase createPlanetUseCase() {
         return new DefaultCreatePlanetUseCase(gateway);
     }
 

@@ -36,9 +36,9 @@ public class ProbeJpaEntity {
     @ManyToOne
     @JoinColumn(name = "planet_id", nullable=false)
     private PlanetJpaEntity planet;
-    @Column(name = "created_at", nullable = false, columnDefinition = "DATETIME(6)")
+    @Column(name = "created_at", nullable = false, columnDefinition = "TIMESTAMP(6)")
     private Instant createdAt;
-    @Column(name = "updated_at", nullable = false, columnDefinition = "DATETIME(6)")
+    @Column(name = "updated_at", nullable = false, columnDefinition = "TIMESTAMP(6)")
     private Instant updatedAt;
 
     @GeneratedJpaOnly

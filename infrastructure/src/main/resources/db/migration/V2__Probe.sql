@@ -4,8 +4,8 @@ CREATE TABLE probes(
   cord_y INTEGER NOT NULL,
   direction VARCHAR(5) NOT NULL,
   name varchar(255) NOT NULL,
-  created_at DATETIME(6) NOT NULL,
-  updated_at DATETIME(6) NOT NULL,
+  created_at TIMESTAMP(6) NOT NULL,
+  updated_at TIMESTAMP(6) NOT NULL,
   planet_id SERIAL NOT NULL,
    CONSTRAINT fk_id_planet FOREIGN KEY (planet_id)
    REFERENCES planets(id)
