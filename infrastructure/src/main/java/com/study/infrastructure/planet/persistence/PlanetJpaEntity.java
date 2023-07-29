@@ -24,9 +24,9 @@ public class PlanetJpaEntity {
     private int cordY;
     @Column(name = "cord_x", nullable = false)
     private int cordX;
-    @Column(name = "created_at", nullable = false, columnDefinition = "DATETIME(6)")
+    @Column(name = "created_at", nullable = false, columnDefinition = "TIMESTAMP(6)")
     private Instant createdAt;
-    @Column(name = "updated_at", nullable = false, columnDefinition = "DATETIME(6)")
+    @Column(name = "updated_at", nullable = false, columnDefinition = "TIMESTAMP(6)")
     private Instant updatedAt;
 
     @GeneratedJpaOnly

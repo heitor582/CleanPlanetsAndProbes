@@ -72,7 +72,7 @@ class CreatePlanetUseCaseTest extends UseCaseTest {
     }
 
     @Test
-    public void givenAInValidCordX_whenCallsCreatePlanet_shouldThrowsNotificationException() {
+    public void givenAnInvalidCordX_whenCallsCreatePlanet_shouldThrowsNotificationException() {
         final var expectedName = "teste";
         final var expectedCordX = 1001;
         final var expectedCordY = 3;
@@ -90,7 +90,7 @@ class CreatePlanetUseCaseTest extends UseCaseTest {
     }
 
     @Test
-    public void givenAInValidCordY_whenCallsCreatePlanet_shouldThrowsNotificationException() {
+    public void givenAnInvalidCordY_whenCallsCreatePlanet_shouldThrowsNotificationException() {
         final var expectedName = "teste";
         final var expectedCordX = 3;
         final var expectedCordY = 0;

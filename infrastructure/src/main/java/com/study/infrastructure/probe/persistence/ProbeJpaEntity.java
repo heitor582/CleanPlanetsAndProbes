@@ -33,9 +33,9 @@ public class ProbeJpaEntity {
     private Direction direction;
     @Column(name="planet_id", nullable = false)
     private Long planetId;
-    @Column(name = "created_at", nullable = false, columnDefinition = "DATETIME(6)")
+    @Column(name = "created_at", nullable = false, columnDefinition = "TIMESTAMP(6)")
     private Instant createdAt;
-    @Column(name = "updated_at", nullable = false, columnDefinition = "DATETIME(6)")
+    @Column(name = "updated_at", nullable = false, columnDefinition = "TIMESTAMP(6)")
     private Instant updatedAt;
 
     @GeneratedJpaOnly

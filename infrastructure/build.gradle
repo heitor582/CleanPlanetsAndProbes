@@ -18,7 +18,8 @@ dependencies {
     implementation(project(":domain"))
     implementation(project(":application"))
 
-    implementation('org.postgresql:postgresql')
+    implementation ('org.flywaydb:flyway-core')
+    runtimeOnly ('org.postgresql:postgresql')
 
     implementation('org.springframework.boot:spring-boot-starter-web') {
         exclude module: 'spring-boot-starter-tomcat'
@@ -30,7 +31,6 @@ dependencies {
     implementation('org.springframework.boot:spring-boot-starter-undertow')
     implementation('org.springframework.boot:spring-boot-starter-data-jpa')
 
-    testImplementation('org.flywaydb:flyway-core')
     testImplementation('org.springframework.boot:spring-boot-starter-test')
 }
 

@@ -3,6 +3,6 @@ CREATE TABLE planets(
    name VARCHAR(255) NOT NULL,
    cord_x INTEGER NOT NULL,
    cord_Y INTEGER NOT NULL,
-   created_at DATETIME(6) NOT NULL,
-   updated_at DATETIME(6) NOT NULL
+   created_at TIMESTAMP(6) NOT NULL,
+   updated_at TIMESTAMP(6) NOT NULL
 );

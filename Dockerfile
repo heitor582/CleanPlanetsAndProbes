@@ -1,8 +1,5 @@
 FROM openjdk:17-oracle AS TEMP_BUILD_IMAGE
 
-RUN addgroup -S spring && adduser -S spring -G spring
-USER spring:spring
-
 RUN microdnf install findutils
 
 ENV APP_HOME=/usr/app/
@@ -17,9 +14,6 @@ COPY . .
 RUN ./gradlew build
 
 FROM openjdk:17-oracle
-
-RUN addgroup -S spring && adduser -S spring -G spring
-USER spring:spring
 
 ENV ARTIFACT_NAME=application.jar
 ENV APP_HOME=/usr/app
