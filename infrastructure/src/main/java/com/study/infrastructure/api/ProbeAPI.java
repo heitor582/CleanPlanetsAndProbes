@@ -1,5 +1,7 @@
 package com.study.infrastructure.api;
 
+import com.study.application.probe.move.MoveProbeOutput;
+import com.study.application.probe.update.UpdateProbeOutput;
 import com.study.domain.pagination.Pagination;
 import com.study.infrastructure.probe.models.CreateProbeRequest;
 import com.study.infrastructure.probe.models.MoveProbeRequest;
@@ -79,7 +81,6 @@ public interface ProbeAPI {
             consumes = MediaType.APPLICATION_JSON_VALUE,
             produces = MediaType.APPLICATION_JSON_VALUE
     )
-
     @Operation(summary = "Update a Probe by id")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Probe update successfully"),
@@ -87,7 +88,7 @@ public interface ProbeAPI {
             @ApiResponse(responseCode = "422", description = "A validation error was thrown"),
             @ApiResponse(responseCode = "500", description = "An internal server error was thrown"),
     })
-    ResponseEntity<?> updateById(@PathVariable(name = "id") final Long id, @RequestBody final UpdateProbeRequest input);
+    ResponseEntity<UpdateProbeOutput> updateById(@PathVariable(name = "id") final Long id, @RequestBody final UpdateProbeRequest input);
 
     @PatchMapping(value = "/{id}",
             consumes = MediaType.APPLICATION_JSON_VALUE,
@@ -101,5 +102,5 @@ public interface ProbeAPI {
             @ApiResponse(responseCode = "422", description = "A validation error was thrown"),
             @ApiResponse(responseCode = "500", description = "An internal server error was thrown"),
     })
-    ResponseEntity<?> move(@PathVariable(name = "id") final Long id, @RequestBody final MoveProbeRequest input);
+    ResponseEntity<MoveProbeOutput> move(@PathVariable(name = "id") final Long id, @RequestBody final MoveProbeRequest input);
 }

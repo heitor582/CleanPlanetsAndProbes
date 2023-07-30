@@ -2,6 +2,7 @@ package com.study.application.probe.move;
 
 import com.study.application.UseCaseTest;
 import com.study.domain.exceptions.NotFoundException;
+import com.study.domain.exceptions.NotificationException;
 import com.study.domain.planet.Planet;
 import com.study.domain.probe.Direction;
 import com.study.domain.probe.Probe;
@@ -10,7 +11,9 @@ import com.study.domain.probe.ProbeID;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.internal.matchers.Not;
 
+import javax.management.NotificationFilter;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -75,6 +78,26 @@ class MoveProbeUseCaseTest extends UseCaseTest {
         assertEquals(expectedErrorMessage, exception.getMessage());
 
         verify(gateway).findBy(eq(id));
+        verify(gateway, times(0)).update(any());
+    }
+
+    @Test
+    public void givenAnInvaliCommand_whenCallsMoveProbe_shouldThrowsNotificationException() {
+        final var expectedErrorMessage = "The command passed did not work";
+        final var expectedErrorCount = 1;
+        final var planet = Planet.newPlanet(5,5,"teste");
+        final var probe = Probe.newProbe("teste",1,1,  planet);
+        final var expectedId = probe.getId();
+        final var command = MoveProbeCommand.with(expectedId.getValue(), "HE");
+
+        when(gateway.findBy(expectedId)).thenReturn(Optional.of(probe));
+
+        final var exception = assertThrows(NotificationException.class, () -> useCase.execute(command));
+
+        assertEquals(expectedErrorCount, exception.getErrors().size());
+        assertEquals(expectedErrorMessage, exception.getErrors().get(0).message());
+
+        verify(gateway).findBy(eq(expectedId));
         verify(gateway, times(0)).update(any());
     }
 }
