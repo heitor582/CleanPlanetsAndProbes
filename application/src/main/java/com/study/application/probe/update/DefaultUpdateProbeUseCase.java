@@ -17,7 +17,6 @@ public class DefaultUpdateProbeUseCase extends UpdateProbeUseCase{
         this.probeGateway = Objects.requireNonNull(probeGateway);
     }
 
-
     @Override
     public UpdateProbeOutput execute(final UpdateProbeCommand updateProbeCommand) {
         final ProbeID probeID= ProbeID.from(updateProbeCommand.id());

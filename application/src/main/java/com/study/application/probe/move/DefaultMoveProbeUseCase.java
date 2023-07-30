@@ -15,11 +15,9 @@ import java.util.Objects;
 
 public class DefaultMoveProbeUseCase extends MoveProbeUseCase{
     private final ProbeGateway probeGateway;
-    private final PlanetGateway planetGateway;
 
-    public DefaultMoveProbeUseCase(final ProbeGateway probeGateway, final PlanetGateway planetGateway) {
+    public DefaultMoveProbeUseCase(final ProbeGateway probeGateway) {
         this.probeGateway = Objects.requireNonNull(probeGateway);
-        this.planetGateway = Objects.requireNonNull(planetGateway);
     }
 
     @Override

@@ -4,7 +4,3 @@ plugins {
 }
 
 group = 'com.study.domain'
-
-dependencies {
-    testImplementation("org.junit.jupiter:junit-jupiter-params:5.9.2")
-}
