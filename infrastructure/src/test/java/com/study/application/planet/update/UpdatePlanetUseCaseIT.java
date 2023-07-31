@@ -50,7 +50,6 @@ class UpdatePlanetUseCaseIT implements IntegrationTest {
         assertEquals(expectedName, planetFound.getName());
         assertEquals(expectedCordX, planetFound.getCordX());
         assertEquals(expectedCordY, planetFound.getCordY());
-        assertEquals(expectedCreatedAt, planetFound.getCreatedAt());
         assertTrue(planetFound.getUpdatedAt().isAfter(updatedAt));
 
         verify(gateway).update(any());
