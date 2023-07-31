@@ -57,6 +57,7 @@ class ListPlanetUseCaseIT implements IntegrationTest {
         assertEquals(expectedPage, actualOutput.currentPage());
         assertEquals(expectedPerPage, actualOutput.perPage());
         assertEquals(expectedTotal, actualOutput.total());
+        assertEquals(expectedItems, actualOutput.items());
         assertEquals(expectedItems.get(0).id(), actualOutput.items().get(0).id());
         assertEquals(expectedItems.get(0).cordX(), actualOutput.items().get(0).cordX());
         assertEquals(expectedItems.get(0).cordY(), actualOutput.items().get(0).cordY());

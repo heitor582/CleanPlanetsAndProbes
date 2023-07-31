@@ -47,7 +47,7 @@ public class Planet extends AggregateRoot<PlanetID> {
     }
 
     public static Planet newPlanet(final int cordY, final int cordX, final String name) {
-        final Instant now = Instant.now();
+        final Instant now = InstantUtils.now();
         return Planet.with(PlanetID.from(0L), cordY, cordX, name, now, now);
     }
 

@@ -35,6 +35,7 @@ class GetPlanetByIdUseCaseIT implements IntegrationTest{
         assertEquals(planet.getName(), output.name());
         assertEquals(planet.getCordX(), output.cordX());
         assertEquals(planet.getCordY(), output.cordY());
+        assertEquals(planet.getCreatedAt(), output.createdAt());
         assertEquals(planet.getUpdatedAt(), output.updatedAt());
 
         verify(gateway).findBy(eq(id));
