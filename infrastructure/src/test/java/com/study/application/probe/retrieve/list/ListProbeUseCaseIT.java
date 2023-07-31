@@ -34,8 +34,8 @@ class ListProbeUseCaseIT implements IntegrationTest {
         // given
         final var planet = planetRepository.saveAndFlush(PlanetJpaEntity.from(Planet.newPlanet(5,5,"teste"))).toAggregate();
         final var members = List.of(
-                Probe.newProbe("teste1",1,1, planet),
-                Probe.newProbe("teste2",1,1, planet)
+                Probe.newProbe("teste1",1,1, planet.getId()),
+                Probe.newProbe("teste2",1,1, planet.getId())
         );
 
         final var savedItems = repository.saveAllAndFlush(members.stream().map(ProbeJpaEntity::from).toList());

@@ -32,7 +32,7 @@ class GetProbeByIdUseCaseIT implements IntegrationTest{
     @Test
     public void givenAValidId_whenCallsGetProbe_shouldReturnIt() {
         final var planet = planetRepository.saveAndFlush(PlanetJpaEntity.from(Planet.newPlanet(5,5,"teste"))).toAggregate();
-        final var probe = repository.saveAndFlush(ProbeJpaEntity.from(Probe.newProbe("teste",1,1, planet))).toAggregate();
+        final var probe = repository.saveAndFlush(ProbeJpaEntity.from(Probe.newProbe("teste",1,1, planet.getId()))).toAggregate();
         final var id = probe.getId();
 
         final var output = useCase.execute(id.getValue());
@@ -42,8 +42,8 @@ class GetProbeByIdUseCaseIT implements IntegrationTest{
         assertEquals(probe.getCordX(), output.cordX());
         assertEquals(probe.getCordY(), output.cordY());
         assertEquals(probe.getDirection(), output.direction());
-        assertEquals(probe.getPlanet().getId().getValue(), output.planetId());
-        assertEquals(probe.getPlanet(), planet);
+        assertEquals(probe.getPlanetId().getValue(), output.planetId());
+        assertEquals(probe.getPlanetId(), planet.getId());
         assertEquals(probe.getCreatedAt(), output.createdAt());
         assertEquals(probe.getUpdatedAt(), output.updatedAt());
 

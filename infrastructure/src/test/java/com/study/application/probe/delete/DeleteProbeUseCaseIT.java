@@ -30,7 +30,7 @@ class DeleteProbeUseCaseIT implements IntegrationTest{
     @Test
     public void givenAValidId_whenCallsDeletePlanet_shouldBeOk() {
         final var planet = planetRepository.saveAndFlush(PlanetJpaEntity.from(Planet.newPlanet(5,5,"teste"))).toAggregate();
-        final var probe = repository.saveAndFlush(ProbeJpaEntity.from(Probe.newProbe("teste",1,1, planet))).toAggregate();
+        final var probe = repository.saveAndFlush(ProbeJpaEntity.from(Probe.newProbe("teste",1,1, planet.getId()))).toAggregate();
         final var id = probe.getId();
 
         assertDoesNotThrow(() -> useCase.execute(id.getValue()));

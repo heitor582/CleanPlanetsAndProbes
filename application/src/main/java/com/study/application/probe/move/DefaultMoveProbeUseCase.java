@@ -3,6 +3,7 @@ package com.study.application.probe.move;
 import com.study.domain.exceptions.NotFoundException;
 import com.study.domain.exceptions.NotificationException;
 import com.study.domain.planet.Planet;
+import com.study.domain.planet.PlanetGateway;
 import com.study.domain.planet.PlanetID;
 import com.study.domain.probe.Probe;
 import com.study.domain.probe.ProbeGateway;
@@ -15,9 +16,14 @@ import java.util.Objects;
 
 public class DefaultMoveProbeUseCase extends MoveProbeUseCase{
     private final ProbeGateway probeGateway;
+    private final PlanetGateway planetGateway;
 
-    public DefaultMoveProbeUseCase(final ProbeGateway probeGateway) {
+    public DefaultMoveProbeUseCase(
+            final ProbeGateway probeGateway,
+            final PlanetGateway planetGateway
+    ) {
         this.probeGateway = Objects.requireNonNull(probeGateway);
+        this.planetGateway = Objects.requireNonNull(planetGateway);
     }
 
     @Override

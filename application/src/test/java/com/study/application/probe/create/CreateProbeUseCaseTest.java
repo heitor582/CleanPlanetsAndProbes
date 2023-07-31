@@ -61,8 +61,7 @@ class CreateProbeUseCaseTest extends UseCaseTest {
                         && Objects.equals(expectedCordX, probe.getCordX())
                         && Objects.equals(expectedCordY, probe.getCordY())
                         && Objects.equals(Direction.UP, probe.getDirection())
-                        && Objects.equals(expectedPlanet, probe.getPlanet())
-                        && Objects.equals(expectedPlanet.getId(), probe.getPlanet().getId())
+                        && Objects.equals(expectedPlanet.getId(), probe.getPlanetId())
                         && Objects.nonNull(probe.getCreatedAt())
                         && Objects.nonNull(probe.getUpdatedAt())
         ));
