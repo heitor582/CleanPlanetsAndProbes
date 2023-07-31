@@ -90,7 +90,7 @@ class ListProbeUseCaseTest extends UseCaseTest {
         // given
         final var expectedPage = 0;
         final var expectedPerPage = 10;
-        final var expectedTerms = "Algo";
+        final var expectedTerms = "";
         final var expectedSort = "createdAt";
         final var expectedDirection = "asc";
         final var expectedTotal = 0;

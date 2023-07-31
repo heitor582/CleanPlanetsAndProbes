@@ -1,11 +1,14 @@
-package com.study.application.planet.delete;
+package com.study.application.probe.delete;
 
 import com.study.IntegrationTest;
 import com.study.domain.planet.Planet;
-import com.study.domain.planet.PlanetGateway;
-import com.study.domain.planet.PlanetID;
+import com.study.domain.probe.Probe;
+import com.study.domain.probe.ProbeGateway;
+import com.study.domain.probe.ProbeID;
 import com.study.infrastructure.planet.persistence.PlanetJpaEntity;
 import com.study.infrastructure.planet.persistence.PlanetRepository;
+import com.study.infrastructure.probe.persistence.ProbeJpaEntity;
+import com.study.infrastructure.probe.persistence.ProbeRepository;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.mock.mockito.SpyBean;
@@ -14,18 +17,21 @@ import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.verify;
 
-class DeletePlanetUseCaseIT implements IntegrationTest{
+class DeleteProbeUseCaseIT implements IntegrationTest{
     @SpyBean
-    private PlanetGateway gateway;
+    private ProbeGateway gateway;
     @Autowired
-    private DeletePlanetUseCase useCase;
+    private DeleteProbeUseCase useCase;
     @Autowired
-    private PlanetRepository repository;
+    private ProbeRepository repository;
+    @Autowired
+    private PlanetRepository planetRepository;
 
     @Test
     public void givenAValidId_whenCallsDeletePlanet_shouldBeOk() {
-        final var planet = Planet.newPlanet(1,1, "teste");
-        final var id = PlanetID.from(repository.saveAndFlush(PlanetJpaEntity.from(planet)).getId());
+        final var planet = planetRepository.saveAndFlush(PlanetJpaEntity.from(Planet.newPlanet(5,5,"teste"))).toAggregate();
+        final var probe = repository.saveAndFlush(ProbeJpaEntity.from(Probe.newProbe("teste",1,1, planet))).toAggregate();
+        final var id = probe.getId();
 
         assertDoesNotThrow(() -> useCase.execute(id.getValue()));
 
@@ -34,7 +40,7 @@ class DeletePlanetUseCaseIT implements IntegrationTest{
 
     @Test
     public void givenAnInvalidId_whenCallsDeletePlanet_shouldBeOk() {
-        final var id = PlanetID.from(123L);
+        final var id = ProbeID.from(123L);
 
         assertDoesNotThrow(() -> useCase.execute(id.getValue()));
 

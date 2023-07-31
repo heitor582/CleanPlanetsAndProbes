@@ -69,6 +69,16 @@ class ListPlanetUseCaseTest extends UseCaseTest {
         assertEquals(expectedPerPage, actualOutput.perPage());
         assertEquals(expectedTotal, actualOutput.total());
         assertEquals(expectedItems, actualOutput.items());
+        assertEquals(expectedItems.get(0).id(), actualOutput.items().get(0).id());
+        assertEquals(expectedItems.get(0).cordX(), actualOutput.items().get(0).cordX());
+        assertEquals(expectedItems.get(0).cordY(), actualOutput.items().get(0).cordY());
+        assertEquals(expectedItems.get(0).createdAt(), actualOutput.items().get(0).createdAt());
+        assertEquals(expectedItems.get(0).name(), actualOutput.items().get(0).name());
+        assertEquals(expectedItems.get(1).id(), actualOutput.items().get(1).id());
+        assertEquals(expectedItems.get(1).cordX(), actualOutput.items().get(1).cordX());
+        assertEquals(expectedItems.get(1).cordY(), actualOutput.items().get(1).cordY());
+        assertEquals(expectedItems.get(1).createdAt(), actualOutput.items().get(1).createdAt());
+        assertEquals(expectedItems.get(1).name(), actualOutput.items().get(1).name());
 
         verify(gateway).findAll(eq(aQuery));
     }
@@ -78,7 +88,7 @@ class ListPlanetUseCaseTest extends UseCaseTest {
         // given
         final var expectedPage = 0;
         final var expectedPerPage = 10;
-        final var expectedTerms = "Algo";
+        final var expectedTerms = "";
         final var expectedSort = "createdAt";
         final var expectedDirection = "asc";
         final var expectedTotal = 0;

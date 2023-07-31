@@ -20,8 +20,7 @@ import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
-@IntegrationTest
-class UpdatePlanetUseCaseIT {
+class UpdatePlanetUseCaseIT implements IntegrationTest {
     @SpyBean
     private PlanetGateway gateway;
     @Autowired
