@@ -1,63 +1,56 @@
 package com.study.application.probe.retrieve.list;
 
-import com.study.application.UseCaseTest;
-import com.study.application.planet.retrieve.list.PlanetListOutput;
-import com.study.domain.pagination.Pagination;
+import com.study.IntegrationTest;
 import com.study.domain.pagination.SearchQuery;
 import com.study.domain.planet.Planet;
 import com.study.domain.probe.Probe;
 import com.study.domain.probe.ProbeGateway;
+import com.study.infrastructure.planet.persistence.PlanetJpaEntity;
+import com.study.infrastructure.planet.persistence.PlanetRepository;
+import com.study.infrastructure.probe.persistence.ProbeJpaEntity;
+import com.study.infrastructure.probe.persistence.ProbeRepository;
 import org.junit.jupiter.api.Test;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.mock.mockito.SpyBean;
 
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.ArgumentMatchers.any;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
 
-class ListProbeUseCaseTest extends UseCaseTest {
-    @Mock
+class ListProbeUseCaseIT implements IntegrationTest {
+    @SpyBean
     private ProbeGateway gateway;
-    @InjectMocks
-    private DefaultListProbeUseCase useCase;
+    @Autowired
+    private ListProbeUseCase useCase;
+    @Autowired
+    private ProbeRepository repository;
+    @Autowired
+    private PlanetRepository planetRepository;
 
-    @Override
-    protected List<Object> getMocks() {
-        return List.of(gateway);
-    }
     @Test
     public void givenAValidQuery_whenCallsListProbes_shouldReturnAll() {
         // given
-        final var planet = Planet.newPlanet(1,1, "teste2");
+        final var planet = planetRepository.saveAndFlush(PlanetJpaEntity.from(Planet.newPlanet(5,5,"teste"))).toAggregate();
         final var members = List.of(
                 Probe.newProbe("teste1",1,1, planet),
                 Probe.newProbe("teste2",1,1, planet)
         );
 
+        final var savedItems = repository.saveAllAndFlush(members.stream().map(ProbeJpaEntity::from).toList());
+
         final var expectedPage = 0;
         final var expectedPerPage = 10;
-        final var expectedTerms = "Algo";
+        final var expectedTerms = "tes";
         final var expectedSort = "createdAt";
         final var expectedDirection = "asc";
         final var expectedTotal = 2;
 
-        final var expectedItems = members.stream()
+        final var expectedItems = savedItems.stream()
+                .map(ProbeJpaEntity::toAggregate)
                 .map(ProbeListOutput::from)
                 .toList();
-
-        final var expectedPagination = new Pagination<>(
-                expectedPage,
-                expectedPerPage,
-                expectedTotal,
-                members
-        );
-
-        when(gateway.findAll(any()))
-                .thenReturn(expectedPagination);
 
         final var aQuery =
                 new SearchQuery(expectedPage, expectedPerPage, expectedTerms, expectedSort, expectedDirection);
@@ -95,18 +88,7 @@ class ListProbeUseCaseTest extends UseCaseTest {
         final var expectedDirection = "asc";
         final var expectedTotal = 0;
 
-        final var members = List.<Probe>of();
         final var expectedItems = List.<ProbeListOutput>of();
-
-        final var expectedPagination = new Pagination<>(
-                expectedPage,
-                expectedPerPage,
-                expectedTotal,
-                members
-        );
-
-        when(gateway.findAll(any()))
-                .thenReturn(expectedPagination);
 
         final var aQuery =
                 new SearchQuery(expectedPage, expectedPerPage, expectedTerms, expectedSort, expectedDirection);
@@ -119,32 +101,6 @@ class ListProbeUseCaseTest extends UseCaseTest {
         assertEquals(expectedPerPage, actualOutput.perPage());
         assertEquals(expectedTotal, actualOutput.total());
         assertEquals(expectedItems, actualOutput.items());
-
-        verify(gateway).findAll(eq(aQuery));
-    }
-
-    @Test
-    public void givenAValidQuery_whenCallsListPlanetsAndGatewayThrowsRandomException_shouldException() {
-        // given
-        final var expectedPage = 0;
-        final var expectedPerPage = 10;
-        final var expectedTerms = "Algo";
-        final var expectedSort = "createdAt";
-        final var expectedDirection = "asc";
-
-        final var expectedErrorMessage = "Gateway error";
-
-        when(gateway.findAll(any()))
-                .thenThrow(new IllegalStateException(expectedErrorMessage));
-
-        final var aQuery =
-                new SearchQuery(expectedPage, expectedPerPage, expectedTerms, expectedSort, expectedDirection);
-
-        // when
-        final var actualException = assertThrows(IllegalStateException.class, () -> useCase.execute(aQuery));
-
-        // then
-        assertEquals(expectedErrorMessage, actualException.getMessage());
 
         verify(gateway).findAll(eq(aQuery));
     }

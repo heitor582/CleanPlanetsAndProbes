@@ -3,11 +3,11 @@ package com.study.application.probe.move;
 import com.study.domain.exceptions.NotFoundException;
 import com.study.domain.exceptions.NotificationException;
 import com.study.domain.planet.Planet;
-import com.study.domain.planet.PlanetGateway;
 import com.study.domain.planet.PlanetID;
 import com.study.domain.probe.Probe;
 import com.study.domain.probe.ProbeGateway;
 import com.study.domain.probe.ProbeID;
+import com.study.domain.validation.Error;
 import com.study.domain.validation.handler.Notification;
 
 import java.util.List;
@@ -15,11 +15,9 @@ import java.util.Objects;
 
 public class DefaultMoveProbeUseCase extends MoveProbeUseCase{
     private final ProbeGateway probeGateway;
-    private final PlanetGateway planetGateway;
 
-    public DefaultMoveProbeUseCase(final ProbeGateway probeGateway, final PlanetGateway planetGateway) {
+    public DefaultMoveProbeUseCase(final ProbeGateway probeGateway) {
         this.probeGateway = Objects.requireNonNull(probeGateway);
-        this.planetGateway = Objects.requireNonNull(planetGateway);
     }
 
     @Override
@@ -35,6 +33,10 @@ public class DefaultMoveProbeUseCase extends MoveProbeUseCase{
         final List<Probe> probesByPlanetId = this.probeGateway.findAllByPlanetId(planetID);
 
         final var notification = Notification.create();
+
+        if(!input.command().matches("(L|M|R)*")) {
+            notification.append(new Error("The command passed did not work"));
+        }
 
         for (final String command: input.command().split("")) {
             if(command.equals("L")) {

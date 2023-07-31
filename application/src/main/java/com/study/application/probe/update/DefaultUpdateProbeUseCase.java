@@ -22,7 +22,6 @@ public class DefaultUpdateProbeUseCase extends UpdateProbeUseCase{
         this.planetGateway = Objects.requireNonNull(planetGateway);
     }
 
-
     @Override
     public UpdateProbeOutput execute(final UpdateProbeCommand updateProbeCommand) {
         final ProbeID probeID= ProbeID.from(updateProbeCommand.id());

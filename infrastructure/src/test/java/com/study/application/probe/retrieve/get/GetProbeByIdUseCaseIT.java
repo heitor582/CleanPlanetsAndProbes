@@ -1,42 +1,39 @@
 package com.study.application.probe.retrieve.get;
 
-import com.study.application.UseCaseTest;
+import com.study.IntegrationTest;
 import com.study.domain.exceptions.NotFoundException;
 import com.study.domain.planet.Planet;
 import com.study.domain.probe.Probe;
 import com.study.domain.probe.ProbeGateway;
 import com.study.domain.probe.ProbeID;
+import com.study.infrastructure.planet.persistence.PlanetJpaEntity;
+import com.study.infrastructure.planet.persistence.PlanetRepository;
+import com.study.infrastructure.probe.persistence.ProbeJpaEntity;
+import com.study.infrastructure.probe.persistence.ProbeRepository;
 import org.junit.jupiter.api.Test;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-
-import java.util.List;
-import java.util.Optional;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.mock.mockito.SpyBean;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
 
-class GetProbeByIdUseCaseTest extends UseCaseTest {
-    @Mock
+class GetProbeByIdUseCaseIT implements IntegrationTest{
+    @SpyBean
     private ProbeGateway gateway;
-    @InjectMocks
-    private DefaultGetProbeByIdUseCase useCase;
-
-    @Override
-    protected List<Object> getMocks() {
-        return List.of(gateway);
-    }
+    @Autowired
+    private GetProbeByIdUseCase useCase;
+    @Autowired
+    private ProbeRepository repository;
+    @Autowired
+    private PlanetRepository planetRepository;
 
     @Test
     public void givenAValidId_whenCallsGetProbe_shouldReturnIt() {
-        final var planet = Planet.newPlanet(1,1, "teste");
-        final var probe = Probe.newProbe("teste",1,1, planet);
+        final var planet = planetRepository.saveAndFlush(PlanetJpaEntity.from(Planet.newPlanet(5,5,"teste"))).toAggregate();
+        final var probe = repository.saveAndFlush(ProbeJpaEntity.from(Probe.newProbe("teste",1,1, planet))).toAggregate();
         final var id = probe.getId();
-
-        when(gateway.findBy(id)).thenReturn(Optional.of(probe));
 
         final var output = useCase.execute(id.getValue());
 
@@ -57,8 +54,6 @@ class GetProbeByIdUseCaseTest extends UseCaseTest {
     public void givenAnInvalidId_whenCallsGetPlanet_shouldThrowsNotFoundException() {
         final var id = ProbeID.from(123L);
         final var expectedErrorMessage = "Probe with ID 123 was not found";
-
-        when(gateway.findBy(id)).thenReturn(Optional.empty());
 
         final var exception = assertThrows(NotFoundException.class, () -> useCase.execute(id.getValue()));
 

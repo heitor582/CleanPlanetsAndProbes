@@ -4,6 +4,8 @@ import com.study.application.probe.create.CreateProbeCommand;
 import com.study.application.probe.create.CreateProbeOutput;
 import com.study.application.probe.create.CreateProbeUseCase;
 import com.study.application.probe.delete.DeleteProbeUseCase;
+import com.study.application.probe.move.MoveProbeCommand;
+import com.study.application.probe.move.MoveProbeOutput;
 import com.study.application.probe.move.MoveProbeUseCase;
 import com.study.application.probe.retrieve.get.GetProbeByIdUseCase;
 import com.study.application.probe.retrieve.list.ListProbeUseCase;
@@ -80,7 +82,7 @@ public class ProbeController implements ProbeAPI {
     }
 
     @Override
-    public ResponseEntity<?> updateById(final Long id, final UpdateProbeRequest input) {
+    public ResponseEntity<UpdateProbeOutput> updateById(final Long id, final UpdateProbeRequest input) {
         final UpdateProbeCommand command = UpdateProbeCommand.with(
             id, input.name(), input.cordX(), input.cordY(), input.direction()
         );
@@ -91,7 +93,12 @@ public class ProbeController implements ProbeAPI {
     }
 
     @Override
-    public ResponseEntity<?> move(final Long id, final MoveProbeRequest input) {
-        return null;
+    public ResponseEntity<MoveProbeOutput> move(final Long id, final MoveProbeRequest input) {
+        final MoveProbeCommand command = MoveProbeCommand.with(
+                id, input.command()
+        );
+        final MoveProbeOutput output = this.moveProbeUseCase.execute(command);
+
+        return ResponseEntity.ok(output);
     }
 }

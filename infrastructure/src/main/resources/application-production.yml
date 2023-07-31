@@ -1,8 +1,8 @@
 postgresql:
-  username: ${DATABASE_POSTGRESQL_USERNAME:planets_probe}
-  password: ${DATABASE_POSTGRESQL_PASSWORD:123456}
-  schema: ${DATABASE_POSTGRESQL_SCHEMA:planets_probe}
-  url: ${DATABASE_POSTGRESQL_URL:localhost:5432}
+  username: ${POSTGRESQL_USERNAME:planets_probe}
+  password: ${POSTGRESQL_PASSWORD:123456}
+  schema: ${POSTGRESQL_SCHEMA:planets_probe}
+  url: ${POSTGRESQL_URL:localhost:5432}
 
 spring:
   jpa:
