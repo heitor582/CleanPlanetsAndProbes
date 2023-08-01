@@ -22,6 +22,7 @@ public class ProbeValidator extends Validator {
     public void validate() {
         checkNameConstraints();
         checkDirectionConstraints();
+        checkCordsConstraints();
     }
 
     private void checkNameConstraints() {
@@ -61,7 +62,6 @@ public class ProbeValidator extends Validator {
 
         if(cordX < CORD_Y_X_MIN || cordX > CORD_Y_X_MAX) {
             this.validationHandler().append(new Error("coordinate X must be between 1 and 1000"));
-            return;
         }
     }
 }
