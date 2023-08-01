@@ -19,7 +19,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.verify;
 
-class GetProbeByIdUseCaseIT implements IntegrationTest{
+class GetProbeByIdUseCaseIT extends IntegrationTest{
     @SpyBean
     private ProbeGateway gateway;
     @Autowired

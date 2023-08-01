@@ -15,8 +15,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
-class CreatePlanetUseCaseIT implements IntegrationTest {
-
+class CreatePlanetUseCaseIT extends IntegrationTest {
     @SpyBean
     private PlanetGateway gateway;
     @Autowired

@@ -3,6 +3,8 @@ package com.study.domain.planet;
 import com.study.domain.UnitTest;
 import com.study.domain.exceptions.NotificationException;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvSource;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -30,27 +32,23 @@ public class PlanetTest extends UnitTest {
         assertEquals(planet.getCreatedAt(), planet.getUpdatedAt());
     }
 
-    @Test
-    public void givenAnInvalidNullName_whenCallsNewPlanet_shouldReceivedANotificationException(){
-        final String expectedName = null;
-        final var expectedCordX = 3;
-        final var expectedCordY = 3;
-        final var expectedErrorMessage = "name should not be null";
-        final var expectedErrorCount = 1;
-
-        final var exception = assertThrows(NotificationException.class,
-                () -> Planet.newPlanet(expectedCordY, expectedCordX, expectedName));
-
-        assertEquals(expectedErrorCount, exception.getErrors().size());
-        assertEquals(expectedErrorMessage, exception.getErrors().get(0).message());
-    }
-
-    @Test
-    public void givenAnInvalidEmptyName_whenCallsNewPlanet_shouldReceivedANotificationException(){
-        final String expectedName = "";
-        final var expectedCordX = 3;
-        final var expectedCordY = 3;
-        final var expectedErrorMessage = "name should not be empty";
+    @ParameterizedTest
+    @CsvSource({
+            ",3,3,name should not be null",
+            "'',3,3,name should not be empty",
+            "aa,3,3,name must be between 3 and 255 characters",
+            " a,3,3,name must be between 3 and 255 characters",
+            "tes,0,3,coordinate X must be between 1 and 1000",
+            "tes,3,0,coordinate Y must be between 1 and 1000",
+            "tes,1001,3,coordinate X must be between 1 and 1000",
+            "tes,3,1001,coordinate Y must be between 1 and 1000",
+    })
+    public void givenAnInvalidParams_whenCallsNewPlanet_shouldReceivedANotificationException(
+            final String expectedName,
+            final int expectedCordX,
+            final int expectedCordY,
+            final String expectedErrorMessage
+    ){
         final var expectedErrorCount = 1;
 
         final var exception = assertThrows(NotificationException.class,
@@ -82,81 +80,6 @@ public class PlanetTest extends UnitTest {
     }
 
     @Test
-    public void givenAnInvalidNameWith2Chars_whenCallsNewPlanet_shouldReceivedANotificationException(){
-        final String expectedName = "a2 ";
-        final var expectedCordX = 3;
-        final var expectedCordY = 3;
-        final var expectedErrorMessage = "name must be between 3 and 255 characters";
-        final var expectedErrorCount = 1;
-
-        final var exception = assertThrows(NotificationException.class,
-                () -> Planet.newPlanet(expectedCordY, expectedCordX, expectedName));
-
-        assertEquals(expectedErrorCount, exception.getErrors().size());
-        assertEquals(expectedErrorMessage, exception.getErrors().get(0).message());
-    }
-
-    @Test
-    public void givenAnInvalidCoordinateXLowerThan1_whenCallsNewPlanet_shouldReceivedANotificationException(){
-        final var expectedName = "teste";
-        final var expectedCordX = 0;
-        final var expectedCordY = 3;
-        final var expectedErrorMessage = "coordinate X must be between 1 and 1000";
-        final var expectedErrorCount = 1;
-
-        final var exception = assertThrows(NotificationException.class,
-                () -> Planet.newPlanet(expectedCordY, expectedCordX, expectedName));
-
-        assertEquals(expectedErrorCount, exception.getErrors().size());
-        assertEquals(expectedErrorMessage, exception.getErrors().get(0).message());
-    }
-
-    @Test
-    public void givenAnInvalidCoordinateXGreaterThan1000_whenCallsNewPlanet_shouldReceivedANotificationException(){
-        final var expectedName = "teste";
-        final var expectedCordX = 1001;
-        final var expectedCordY = 3;
-        final var expectedErrorMessage = "coordinate X must be between 1 and 1000";
-        final var expectedErrorCount = 1;
-
-        final var exception = assertThrows(NotificationException.class,
-                () -> Planet.newPlanet(expectedCordY, expectedCordX, expectedName));
-
-        assertEquals(expectedErrorCount, exception.getErrors().size());
-        assertEquals(expectedErrorMessage, exception.getErrors().get(0).message());
-    }
-
-    @Test
-    public void givenAnInvalidCoordinateYGreaterThan1000_whenCallsNewPlanet_shouldReceivedANotificationException(){
-        final var expectedName = "teste";
-        final var expectedCordX = 3;
-        final var expectedCordY = 1001;
-        final var expectedErrorMessage = "coordinate Y must be between 1 and 1000";
-        final var expectedErrorCount = 1;
-
-        final var exception = assertThrows(NotificationException.class,
-                () -> Planet.newPlanet(expectedCordY, expectedCordX, expectedName));
-
-        assertEquals(expectedErrorCount, exception.getErrors().size());
-        assertEquals(expectedErrorMessage, exception.getErrors().get(0).message());
-    }
-
-    @Test
-    public void givenAnInvalidCoordinateYLowerThan1_whenCallsNewPlanet_shouldReceivedANotificationException(){
-        final var expectedName = "teste";
-        final var expectedCordX = 3;
-        final var expectedCordY = 0;
-        final var expectedErrorMessage = "coordinate Y must be between 1 and 1000";
-        final var expectedErrorCount = 1;
-
-        final var exception = assertThrows(NotificationException.class,
-                () -> Planet.newPlanet(expectedCordY, expectedCordX, expectedName));
-
-        assertEquals(expectedErrorCount, exception.getErrors().size());
-        assertEquals(expectedErrorMessage, exception.getErrors().get(0).message());
-    }
-
-    @Test
     public void givenAValidParams_whenCallsUpdatePlanet_shouldReturnItUpdated() {
         final var expectedName = "teste";
         final var expectedCordX = 3;
@@ -178,13 +101,23 @@ public class PlanetTest extends UnitTest {
         assertTrue(planet.getUpdatedAt().isAfter(expectedUpdatedAt));
     }
 
-    @Test
-    public void givenAValidPlanet_whenCallsUpdatePlanetWithNullName_shouldReturnANotificationException() {
-        final String expectedName = null;
-        final var expectedCordX = 3;
-        final var expectedCordY = 3;
-
-        final var expectedErrorMessage =  "name should not be null";
+    @ParameterizedTest
+    @CsvSource({
+            ",3,3,name should not be null",
+            "'',3,3,name should not be empty",
+            "aa,3,3,name must be between 3 and 255 characters",
+            " a,3,3,name must be between 3 and 255 characters",
+            "tes,0,3,coordinate X must be between 1 and 1000",
+            "tes,3,0,coordinate Y must be between 1 and 1000",
+            "tes,1001,3,coordinate X must be between 1 and 1000",
+            "tes,3,1001,coordinate Y must be between 1 and 1000",
+    })
+    public void givenAValidPlanet_whenCallsUpdatePlanetWithNullParams_shouldReturnANotificationException(
+            final String expectedName,
+            final int expectedCordX,
+            final int expectedCordY,
+            final String expectedErrorMessage
+    ) {
         final var expectedErrorCount = 1;
 
         final var planet = Planet.newPlanet(1, 1, "tes");

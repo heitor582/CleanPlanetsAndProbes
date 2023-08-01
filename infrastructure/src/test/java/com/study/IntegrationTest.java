@@ -16,5 +16,5 @@ import java.lang.annotation.Target;
 @SpringBootTest(classes = WebServerConfig.class)
 @ExtendWith(SQLCleanUpExtension.class)
 @Tag("integrationTest")
-public interface IntegrationTest {
+public abstract class IntegrationTest {
 }

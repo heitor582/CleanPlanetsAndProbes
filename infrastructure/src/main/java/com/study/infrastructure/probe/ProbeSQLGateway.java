@@ -22,7 +22,7 @@ import java.util.Optional;
 public class ProbeSQLGateway implements ProbeGateway {
     private final ProbeRepository repository;
 
-    ProbeSQLGateway(final ProbeRepository repository) {
+    public ProbeSQLGateway(final ProbeRepository repository) {
         this.repository = Objects.requireNonNull(repository);
     }
 

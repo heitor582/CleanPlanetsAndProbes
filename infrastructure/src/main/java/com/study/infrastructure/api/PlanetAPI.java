@@ -77,7 +77,6 @@ public interface PlanetAPI {
             consumes = MediaType.APPLICATION_JSON_VALUE,
             produces = MediaType.APPLICATION_JSON_VALUE
     )
-
     @Operation(summary = "Update a planet by id")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Planet update successfully"),
