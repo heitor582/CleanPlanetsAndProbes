@@ -5,6 +5,8 @@ import com.study.domain.exceptions.NotificationException;
 import com.study.domain.planet.PlanetGateway;
 import com.study.infrastructure.planet.persistence.PlanetRepository;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.mock.mockito.SpyBean;
 
@@ -46,48 +48,23 @@ class CreatePlanetUseCaseIT extends IntegrationTest {
         verify(gateway).create(any());
     }
 
-    @Test
-    public void givenAInValidName_whenCallsCreatePlanet_shouldThrowsNotificationException() {
-        final String expectedName = null;
-        final var expectedCordX = 3;
-        final var expectedCordY = 3;
-        final var expectedErrorMessage = "name should not be null";
-        final var expectedErrorCount = 1;
-
-        final var command = CreatePlanetCommand.with(expectedName, expectedCordX, expectedCordY);
-
-        final var exception = assertThrows(NotificationException.class, () -> useCase.execute(command));
-
-        assertEquals(expectedErrorCount, exception.getErrors().size());
-        assertEquals(expectedErrorMessage, exception.getErrors().get(0).message());
-
-        verify(gateway, times(0)).create(any());
-    }
-
-    @Test
-    public void givenAnInvalidCordX_whenCallsCreatePlanet_shouldThrowsNotificationException() {
-        final var expectedName = "teste";
-        final var expectedCordX = 1001;
-        final var expectedCordY = 3;
-        final var expectedErrorMessage = "coordinate X must be between 1 and 1000";
-        final var expectedErrorCount = 1;
-
-        final var command = CreatePlanetCommand.with(expectedName, expectedCordX, expectedCordY);
-
-        final var exception = assertThrows(NotificationException.class, () -> useCase.execute(command));
-
-        assertEquals(expectedErrorCount, exception.getErrors().size());
-        assertEquals(expectedErrorMessage, exception.getErrors().get(0).message());
-
-        verify(gateway, times(0)).create(any());
-    }
-
-    @Test
-    public void givenAnInvalidCordY_whenCallsCreatePlanet_shouldThrowsNotificationException() {
-        final var expectedName = "teste";
-        final var expectedCordX = 3;
-        final var expectedCordY = 0;
-        final var expectedErrorMessage = "coordinate Y must be between 1 and 1000";
+    @ParameterizedTest
+    @CsvSource({
+            ",3,3,name should not be null",
+            "'',3,3,name should not be empty",
+            "aa,3,3,name must be between 3 and 255 characters",
+            " a,3,3,name must be between 3 and 255 characters",
+            "tes,0,3,coordinate X must be between 1 and 1000",
+            "tes,3,0,coordinate Y must be between 1 and 1000",
+            "tes,1001,3,coordinate X must be between 1 and 1000",
+            "tes,3,1001,coordinate Y must be between 1 and 1000",
+    })
+    public void givenAnInvalidName_whenCallsCreatePlanet_shouldThrowsNotificationException(
+            final String expectedName,
+            final int expectedCordX,
+            final int expectedCordY,
+            final String expectedErrorMessage
+    ) {
         final var expectedErrorCount = 1;
 
         final var command = CreatePlanetCommand.with(expectedName, expectedCordX, expectedCordY);

@@ -193,31 +193,24 @@ public class ProbeTest extends UnitTest {
         assertNotEquals(probe.getCreatedAt(), probe.getUpdatedAt());
     }
 
-    @Test
-    public void givenAnInvalidNullName_whenCallsNewProbe_shouldReceivedANotificationException(){
-        final String expectedName = null;
-        final int expectedCordX = 3;
-        final int expectedCordY = 3;
+    @ParameterizedTest
+    @CsvSource({
+            ",3,3,name should not be null",
+            "'',3,3,name should not be empty",
+            "aa,3,3,name must be between 3 and 255 characters",
+            " a,3,3,name must be between 3 and 255 characters",
+            "tes,0,3,coordinate X must be between 1 and 1000",
+            "tes,3,0,coordinate Y must be between 1 and 1000",
+            "tes,1001,3,coordinate X must be between 1 and 1000",
+            "tes,3,1001,coordinate Y must be between 1 and 1000",
+    })
+    public void givenAnInvalidName_whenCallsNewProbe_shouldReceivedANotificationException(
+            final String expectedName,
+            final int expectedCordX,
+            final int expectedCordY,
+            final String expectedErrorMessage
+    ){
         final Planet planet = Planet.newPlanet(5, 5, "tes");
-
-        final var expectedErrorMessage = "name should not be null";
-        final var expectedErrorCount = 1;
-
-        final var exception = assertThrows(NotificationException.class,
-                () -> Probe.newProbe(expectedName, expectedCordX, expectedCordY, planet));
-
-        assertEquals(expectedErrorCount, exception.getErrors().size());
-        assertEquals(expectedErrorMessage, exception.getErrors().get(0).message());
-    }
-
-    @Test
-    public void givenAnInvalidEmptyName_whenCallsNewProbe_shouldReceivedANotificationException(){
-        final String expectedName = "";
-        final int expectedCordX = 3;
-        final int expectedCordY = 3;
-        final Planet planet = Planet.newPlanet(5, 5, "tes");
-
-        final var expectedErrorMessage = "name should not be empty";
         final var expectedErrorCount = 1;
 
         final var exception = assertThrows(NotificationException.class,
@@ -250,22 +243,6 @@ public class ProbeTest extends UnitTest {
         assertEquals(expectedErrorMessage, exception.getErrors().get(0).message());
     }
 
-    @Test
-    public void givenAnInvalidNameWith2Chars_whenCallsNewProbe_shouldReceivedANotificationException(){
-        final String expectedName = "a2 ";
-        final int expectedCordX = 3;
-        final int expectedCordY = 3;
-        final Planet planet = Planet.newPlanet(5, 5, "tes");
-
-        final var expectedErrorMessage = "name must be between 3 and 255 characters";
-        final var expectedErrorCount = 1;
-
-        final var exception = assertThrows(NotificationException.class,
-                () -> Probe.newProbe(expectedName, expectedCordX, expectedCordY, planet));
-
-        assertEquals(expectedErrorCount, exception.getErrors().size());
-        assertEquals(expectedErrorMessage, exception.getErrors().get(0).message());
-    }
 
     @Test
     public void givenAValidParams_whenCallsUpdateProbe_shouldReturnItUpdated() {
@@ -293,15 +270,26 @@ public class ProbeTest extends UnitTest {
         assertTrue(probe.getUpdatedAt().isAfter(expectedUpdatedAt));
     }
 
-    @Test
-    public void givenAValidProbe_whenCallsUpdateProbeWithNullName_shouldReturnANotificationException() {
-        final String expectedName = null;
-        final var expectedCordX = 3;
-        final var expectedCordY = 3;
+    @ParameterizedTest
+    @CsvSource({
+            ",3,3,name should not be null",
+            "'',3,3,name should not be empty",
+            "aa,3,3,name must be between 3 and 255 characters",
+            " a,3,3,name must be between 3 and 255 characters",
+            "tes,0,3,coordinate X must be between 1 and 1000",
+            "tes,3,0,coordinate Y must be between 1 and 1000",
+            "tes,1001,3,coordinate X must be between 1 and 1000",
+            "tes,3,1001,coordinate Y must be between 1 and 1000",
+    })
+    public void givenAValidProbe_whenCallsUpdateProbeWithInvalidName_shouldReturnANotificationException(
+            final String expectedName,
+            final int expectedCordX,
+            final int expectedCordY,
+            final String expectedErrorMessage
+    ) {
         final Planet planet = Planet.newPlanet(3, 3, "tes");
         final Direction direction = Direction.DOWN;
 
-        final var expectedErrorMessage =  "name should not be null";
         final var expectedErrorCount = 1;
 
         final var probe = Probe.newProbe("tes", 1, 2, planet);

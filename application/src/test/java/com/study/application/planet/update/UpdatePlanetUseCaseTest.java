@@ -7,6 +7,8 @@ import com.study.domain.planet.Planet;
 import com.study.domain.planet.PlanetGateway;
 import com.study.domain.planet.PlanetID;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvSource;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 
@@ -65,15 +67,26 @@ class UpdatePlanetUseCaseTest extends UseCaseTest {
         ));
     }
 
-    @Test
-    public void givenAnInvalidName_whenCallsUpdatePlanet_shouldReturnNotification(){
+    @ParameterizedTest
+    @CsvSource({
+            ",3,3,name should not be null",
+            "'',3,3,name should not be empty",
+            "aa,3,3,name must be between 3 and 255 characters",
+            " a,3,3,name must be between 3 and 255 characters",
+            "tes,0,3,coordinate X must be between 1 and 1000",
+            "tes,3,0,coordinate Y must be between 1 and 1000",
+            "tes,1001,3,coordinate X must be between 1 and 1000",
+            "tes,3,1001,coordinate Y must be between 1 and 1000",
+    })
+    public void givenAnInvalidName_whenCallsUpdatePlanet_shouldReturnNotification(
+            final String expectedName,
+            final int expectedCordX,
+            final int expectedCordY,
+            final String expectedErrorMessage
+    ){
         final var planet = Planet.newPlanet(1,1,"teste");
 
         final var expectedId = planet.getId();
-        final String expectedName = null;
-        final var expectedCordX = 2;
-        final var expectedCordY = 2;
-        final var expectedErrorMessage = "name should not be null";
         final var expectedErrorCount = 1;
 
         final var command = UpdatePlanetCommand.with(expectedId.getValue(), expectedName, expectedCordX, expectedCordY);
@@ -89,59 +102,6 @@ class UpdatePlanetUseCaseTest extends UseCaseTest {
         verify(gateway).findBy(eq(expectedId));
         verify(gateway, times(0)).update(any());
     }
-
-    @Test
-    public void givenAnInvalidCordX_whenCallsUpdatePlanet_shouldReturnNotification(){
-        final var planet = Planet.newPlanet(1,1,"teste");
-
-        final var expectedId = planet.getId();
-        final var expectedName = "teste1";
-        final var expectedCordX = 0;
-        final var expectedCordY = 2;
-
-        final var expectedErrorMessage = "coordinate X must be between 1 and 1000";
-        final var expectedErrorCount = 1;
-
-        final var command = UpdatePlanetCommand.with(expectedId.getValue(), expectedName, expectedCordX, expectedCordY);
-
-
-        when(gateway.findBy(expectedId)).thenReturn(Optional.of(planet));
-
-        final var exception = assertThrows(NotificationException.class, () -> useCase.execute(command));
-
-        assertEquals(expectedErrorCount, exception.getErrors().size());
-        assertEquals(expectedErrorMessage, exception.getErrors().get(0).message());
-
-        verify(gateway).findBy(eq(expectedId));
-        verify(gateway, times(0)).update(any());
-    }
-
-    @Test
-    public void givenAnInvalidCordY_whenCallsUpdatePlanet_shouldReturnNotification(){
-        final var planet = Planet.newPlanet(1,1,"teste");
-
-        final var expectedId = planet.getId();
-        final var expectedName = "teste1";
-        final var expectedCordX = 2;
-        final var expectedCordY = 1002;
-
-        final var expectedErrorMessage = "coordinate Y must be between 1 and 1000";
-        final var expectedErrorCount = 1;
-
-        final var command = UpdatePlanetCommand.with(expectedId.getValue(), expectedName, expectedCordX, expectedCordY);
-
-
-        when(gateway.findBy(expectedId)).thenReturn(Optional.of(planet));
-
-        final var exception = assertThrows(NotificationException.class, () -> useCase.execute(command));
-
-        assertEquals(expectedErrorCount, exception.getErrors().size());
-        assertEquals(expectedErrorMessage, exception.getErrors().get(0).message());
-
-        verify(gateway).findBy(eq(expectedId));
-        verify(gateway, times(0)).update(any());
-    }
-
 
     @Test
     public void givenAValidCommand_whenCallsUpdatePlanetWithNonexistentId_shouldReturnNotFoundException (){
