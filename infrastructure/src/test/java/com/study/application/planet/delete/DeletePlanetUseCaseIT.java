@@ -14,7 +14,7 @@ import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.verify;
 
-class DeletePlanetUseCaseIT implements IntegrationTest{
+class DeletePlanetUseCaseIT extends IntegrationTest{
     @SpyBean
     private PlanetGateway gateway;
     @Autowired

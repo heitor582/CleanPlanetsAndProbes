@@ -8,6 +8,7 @@ import com.study.domain.planet.PlanetID;
 import com.study.infrastructure.planet.persistence.PlanetJpaEntity;
 import com.study.infrastructure.planet.persistence.PlanetRepository;
 import com.study.infrastructure.utils.SpecificationUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
@@ -20,7 +21,7 @@ import java.util.Optional;
 public class PlanetSQLGateway implements PlanetGateway {
     private final PlanetRepository repository;
 
-    PlanetSQLGateway(final PlanetRepository repository) {
+    public PlanetSQLGateway(final PlanetRepository repository) {
         this.repository = Objects.requireNonNull(repository);
     }
 

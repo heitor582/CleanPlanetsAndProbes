@@ -24,7 +24,7 @@ import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
-class MoveProbeUseCaseIT implements IntegrationTest{
+class MoveProbeUseCaseIT extends IntegrationTest{
     @SpyBean
     private ProbeGateway gateway;
     @SpyBean
@@ -85,7 +85,7 @@ class MoveProbeUseCaseIT implements IntegrationTest{
     }
 
     @Test
-    public void givenAnInvaliCommand_whenCallsMoveProbe_shouldThrowsNotificationException() {
+    public void givenAnInvalidCommand_whenCallsMoveProbe_shouldThrowsNotificationException() {
         final var expectedErrorMessage = "The command passed did not work";
         final var expectedErrorCount = 1;
 

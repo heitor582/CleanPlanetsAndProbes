@@ -16,7 +16,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.verify;
 
-class ListPlanetUseCaseIT implements IntegrationTest {
+class ListPlanetUseCaseIT extends IntegrationTest {
     @SpyBean
     private PlanetGateway gateway;
     @Autowired

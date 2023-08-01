@@ -17,7 +17,7 @@ import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.verify;
 
-class DeleteProbeUseCaseIT implements IntegrationTest{
+class DeleteProbeUseCaseIT extends IntegrationTest{
     @SpyBean
     private ProbeGateway gateway;
     @Autowired

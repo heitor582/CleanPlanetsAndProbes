@@ -29,7 +29,7 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-class UpdateProbeUseCaseIT implements IntegrationTest {
+class UpdateProbeUseCaseIT extends IntegrationTest {
     @SpyBean
     private ProbeGateway gateway;
     @Autowired
