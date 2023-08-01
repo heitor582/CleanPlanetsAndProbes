@@ -1,10 +1,10 @@
 package com.study.infrastructure.probe.persistence;
 
+import com.study.domain.planet.PlanetID;
 import com.study.domain.probe.Direction;
 import com.study.domain.probe.Probe;
 import com.study.domain.probe.ProbeID;
 import com.study.infrastructure.configuration.GeneratedJpaOnly;
-import com.study.infrastructure.planet.persistence.PlanetJpaEntity;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -13,8 +13,6 @@ import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import java.time.Instant;
 
@@ -33,9 +31,8 @@ public class ProbeJpaEntity {
     @Column(name="direction", nullable = false)
     @Enumerated(EnumType.STRING)
     private Direction direction;
-    @ManyToOne
-    @JoinColumn(name = "planet_id", nullable=false)
-    private PlanetJpaEntity planet;
+    @Column(name="planet_id", nullable = false)
+    private Long planetId;
     @Column(name = "created_at", nullable = false, columnDefinition = "TIMESTAMP(6)")
     private Instant createdAt;
     @Column(name = "updated_at", nullable = false, columnDefinition = "TIMESTAMP(6)")
@@ -51,7 +48,7 @@ public class ProbeJpaEntity {
             final int cordY,
             final int cordX,
             final Direction direction,
-            final PlanetJpaEntity planet,
+            final Long planetId,
             final Instant createdAt,
             final Instant updatedAt
 
@@ -61,19 +58,19 @@ public class ProbeJpaEntity {
         this.cordY = cordY;
         this.cordX = cordX;
         this.direction = direction;
-        this.planet = planet;
+        this.planetId = planetId;
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
     }
 
     public static ProbeJpaEntity from(final Probe probe) {
         return new ProbeJpaEntity(
-          probe.getId().getValue(),
+                probe.getId().getValue(),
                 probe.getName(),
                 probe.getCordY(),
                 probe.getCordX(),
                 probe.getDirection(),
-                PlanetJpaEntity.from(probe.getPlanet()),
+                probe.getPlanetId().getValue(),
                 probe.getCreatedAt(),
                 probe.getUpdatedAt()
         );
@@ -86,7 +83,7 @@ public class ProbeJpaEntity {
                 this.cordY,
                 this.name,
                 this.direction,
-                this.planet.toAggregate(),
+                PlanetID.from(this.planetId),
                 this.createdAt,
                 this.updatedAt
         );

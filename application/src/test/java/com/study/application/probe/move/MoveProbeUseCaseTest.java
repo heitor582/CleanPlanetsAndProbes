@@ -4,6 +4,7 @@ import com.study.application.UseCaseTest;
 import com.study.domain.exceptions.NotFoundException;
 import com.study.domain.exceptions.NotificationException;
 import com.study.domain.planet.Planet;
+import com.study.domain.planet.PlanetGateway;
 import com.study.domain.probe.Direction;
 import com.study.domain.probe.Probe;
 import com.study.domain.probe.ProbeGateway;
@@ -31,6 +32,8 @@ import static org.mockito.Mockito.when;
 class MoveProbeUseCaseTest extends UseCaseTest {
     @Mock
     private ProbeGateway gateway;
+    @Mock
+    private PlanetGateway planetGateway;
     @InjectMocks
     private DefaultMoveProbeUseCase useCase;
 
@@ -42,10 +45,11 @@ class MoveProbeUseCaseTest extends UseCaseTest {
     @Test
     public void givenAValidCommand_whenCallsMoveProbe_shouldReturnIt() {
         final var planet = Planet.newPlanet(5,5,"teste");
-        final var probe = Probe.newProbe("teste",1,1,  planet);
+        final var probe = Probe.newProbe("teste",1,1,  planet.getId());
         final var expectedId = probe.getId();
         final var command = MoveProbeCommand.with(expectedId.getValue(), "LRM");
 
+        when(planetGateway.findBy(planet.getId())).thenReturn(Optional.of(planet));
         when(gateway.findBy(expectedId)).thenReturn(Optional.of(probe));
         when(gateway.update(any())).thenAnswer(returnsFirstArg());
 
@@ -53,14 +57,16 @@ class MoveProbeUseCaseTest extends UseCaseTest {
 
         assertEquals(output.id(), probe.getId().getValue());
 
+        verify(planetGateway).findBy(planet.getId());
+        verify(gateway).findBy(expectedId);
+        verify(gateway).findAllByPlanetId(planet.getId());
         verify(gateway).update(argThat(cmd ->
                 Objects.nonNull(cmd.getId())
                         && Objects.equals(probe.getName(), cmd.getName())
                         && Objects.equals(probe.getCordX(), cmd.getCordX())
                         && Objects.equals(probe.getCordY(), cmd.getCordY())
                         && Objects.equals(Direction.UP, cmd.getDirection())
-                        && Objects.equals(planet, cmd.getPlanet())
-                        && Objects.equals(planet.getId(), cmd.getPlanet().getId())
+                        && Objects.equals(planet.getId(), cmd.getPlanetId())
                         && Objects.nonNull(cmd.getCreatedAt())
                         && Objects.nonNull(cmd.getUpdatedAt())
         ));
@@ -86,10 +92,11 @@ class MoveProbeUseCaseTest extends UseCaseTest {
         final var expectedErrorMessage = "The command passed did not work";
         final var expectedErrorCount = 1;
         final var planet = Planet.newPlanet(5,5,"teste");
-        final var probe = Probe.newProbe("teste",1,1,  planet);
+        final var probe = Probe.newProbe("teste",1,1,  planet.getId());
         final var expectedId = probe.getId();
         final var command = MoveProbeCommand.with(expectedId.getValue(), "HE");
 
+        when(planetGateway.findBy(planet.getId())).thenReturn(Optional.of(planet));
         when(gateway.findBy(expectedId)).thenReturn(Optional.of(probe));
 
         final var exception = assertThrows(NotificationException.class, () -> useCase.execute(command));

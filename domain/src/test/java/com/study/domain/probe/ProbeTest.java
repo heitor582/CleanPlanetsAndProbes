@@ -25,7 +25,7 @@ public class ProbeTest extends UnitTest {
         final Direction expectedDirection = Direction.UP;
         final Planet planet = Planet.newPlanet(3, 5, "tes");
 
-        final var probe = Probe.newProbe(expectedName, expectedCordX, expectedCordY, planet);
+        final var probe = Probe.newProbe(expectedName, expectedCordX, expectedCordY, planet.getId());
 
         assertNotNull(probe);
         assertNotNull(probe.getId());
@@ -34,7 +34,7 @@ public class ProbeTest extends UnitTest {
         assertEquals(expectedCordX, probe.getCordX());
         assertEquals(expectedCordY, probe.getCordY());
         assertEquals(expectedDirection, probe.getDirection());
-        assertEquals(planet.getId(), probe.getPlanet().getId());
+        assertEquals(planet.getId(), probe.getPlanetId());
         assertNotNull(probe.getCreatedAt());
         assertNotNull(probe.getUpdatedAt());
         assertEquals(probe.getCreatedAt(), probe.getUpdatedAt());
@@ -47,7 +47,7 @@ public class ProbeTest extends UnitTest {
         final int expectedCordY = 3;
         final Planet planet = Planet.newPlanet(3, 5, "tes");
 
-        final var probe = Probe.newProbe(expectedName, initialCordX, expectedCordY, planet);
+        final var probe = Probe.newProbe(expectedName, initialCordX, expectedCordY, planet.getId());
         probe.update(probe.getName(), probe.getCordX(), probe.getCordY(), direction);
 
         final var expectedCreatedAt = probe.getCreatedAt();
@@ -62,7 +62,7 @@ public class ProbeTest extends UnitTest {
         assertEquals(expectedCordX, probe.getCordX());
         assertEquals(expectedCordY, probe.getCordY());
         assertEquals(direction, probe.getDirection());
-        assertEquals(planet.getId(), probe.getPlanet().getId());
+        assertEquals(planet.getId(), probe.getPlanetId());
         assertEquals(expectedCreatedAt, probe.getCreatedAt());
         assertNotNull(probe.getCreatedAt());
         assertNotNull(probe.getUpdatedAt());
@@ -78,7 +78,7 @@ public class ProbeTest extends UnitTest {
         final int expectedCordX = 3;
         final Planet planet = Planet.newPlanet(5, 5, "tes");
 
-        final var probe = Probe.newProbe(expectedName, expectedCordX, expectedCordY, planet);
+        final var probe = Probe.newProbe(expectedName, expectedCordX, expectedCordY, planet.getId());
         probe.update(probe.getName(), probe.getCordX(), probe.getCordY(), expectedDirection);
 
         final var expectedCreatedAt = probe.getCreatedAt();
@@ -93,7 +93,7 @@ public class ProbeTest extends UnitTest {
         assertEquals(expectedCordX, probe.getCordX());
         assertEquals(expectedCordY, probe.getCordY());
         assertEquals(expectedDirection, probe.getDirection());
-        assertEquals(planet.getId(), probe.getPlanet().getId());
+        assertEquals(planet.getId(), probe.getPlanetId());
         assertEquals(expectedCreatedAt, probe.getCreatedAt());
         assertNotNull(probe.getCreatedAt());
         assertNotNull(probe.getUpdatedAt());
@@ -108,7 +108,7 @@ public class ProbeTest extends UnitTest {
         final int expectedCordX = 5;
         final Planet planet = Planet.newPlanet(5, 5, "tes");
 
-        final var probe = Probe.newProbe(expectedName, expectedCordX, initialCordY, planet);
+        final var probe = Probe.newProbe(expectedName, expectedCordX, initialCordY, planet.getId());
         probe.update(probe.getName(), probe.getCordX(), probe.getCordY(), direction);
 
         final var expectedCreatedAt = probe.getCreatedAt();
@@ -123,7 +123,7 @@ public class ProbeTest extends UnitTest {
         assertEquals(expectedCordX, probe.getCordX());
         assertEquals(expectedCordY, probe.getCordY());
         assertEquals(direction, probe.getDirection());
-        assertEquals(planet.getId(), probe.getPlanet().getId());
+        assertEquals(planet.getId(), probe.getPlanetId());
         assertEquals(expectedCreatedAt, probe.getCreatedAt());
         assertNotNull(probe.getCreatedAt());
         assertNotNull(probe.getUpdatedAt());
@@ -140,7 +140,7 @@ public class ProbeTest extends UnitTest {
         final Direction expectedDirection = direction.turnLeft();
         final Planet planet = Planet.newPlanet(3, 5, "tes");
 
-        final var probe = Probe.newProbe(expectedName, expectedCordX, expectedCordY, planet);
+        final var probe = Probe.newProbe(expectedName, expectedCordX, expectedCordY, planet.getId());
         probe.update(probe.getName(), probe.getCordX(), probe.getCordY(), direction);
         final var expectedCreatedAt = probe.getCreatedAt();
         final var expectedUpdatedAt = probe.getUpdatedAt();
@@ -154,7 +154,7 @@ public class ProbeTest extends UnitTest {
         assertEquals(expectedCordX, probe.getCordX());
         assertEquals(expectedCordY, probe.getCordY());
         assertEquals(expectedDirection, probe.getDirection());
-        assertEquals(planet.getId(), probe.getPlanet().getId());
+        assertEquals(planet.getId(), probe.getPlanetId());
         assertEquals(expectedCreatedAt, probe.getCreatedAt());
         assertNotNull(probe.getCreatedAt());
         assertNotNull(probe.getUpdatedAt());
@@ -171,7 +171,7 @@ public class ProbeTest extends UnitTest {
         final Direction expectedDirection = direction.turnRight();
         final Planet planet = Planet.newPlanet(3, 5, "tes");
 
-        final var probe = Probe.newProbe(expectedName, expectedCordX, expectedCordY, planet);
+        final var probe = Probe.newProbe(expectedName, expectedCordX, expectedCordY, planet.getId());
         probe.update(probe.getName(), probe.getCordX(), probe.getCordY(), direction);
         final var expectedCreatedAt = probe.getCreatedAt();
         final var expectedUpdatedAt = probe.getUpdatedAt();
@@ -185,7 +185,7 @@ public class ProbeTest extends UnitTest {
         assertEquals(expectedCordX, probe.getCordX());
         assertEquals(expectedCordY, probe.getCordY());
         assertEquals(expectedDirection, probe.getDirection());
-        assertEquals(planet.getId(), probe.getPlanet().getId());
+        assertEquals(planet.getId(), probe.getPlanetId());
         assertEquals(expectedCreatedAt, probe.getCreatedAt());
         assertNotNull(probe.getCreatedAt());
         assertNotNull(probe.getUpdatedAt());
@@ -214,7 +214,7 @@ public class ProbeTest extends UnitTest {
         final var expectedErrorCount = 1;
 
         final var exception = assertThrows(NotificationException.class,
-                () -> Probe.newProbe(expectedName, expectedCordX, expectedCordY, planet));
+                () -> Probe.newProbe(expectedName, expectedCordX, expectedCordY, planet.getId()));
 
         assertEquals(expectedErrorCount, exception.getErrors().size());
         assertEquals(expectedErrorMessage, exception.getErrors().get(0).message());
@@ -237,12 +237,11 @@ public class ProbeTest extends UnitTest {
         final var expectedErrorCount = 1;
 
         final var exception = assertThrows(NotificationException.class,
-                () -> Probe.newProbe(expectedName, expectedCordX, expectedCordY, planet));
+                () -> Probe.newProbe(expectedName, expectedCordX, expectedCordY, planet.getId()));
 
         assertEquals(expectedErrorCount, exception.getErrors().size());
         assertEquals(expectedErrorMessage, exception.getErrors().get(0).message());
     }
-
 
     @Test
     public void givenAValidParams_whenCallsUpdateProbe_shouldReturnItUpdated() {
@@ -252,7 +251,7 @@ public class ProbeTest extends UnitTest {
         final Planet planet = Planet.newPlanet(3, 3, "tes");
         final Direction direction = Direction.DOWN;
 
-        final var probe = Probe.newProbe("tes", 1, 2, planet);
+        final var probe = Probe.newProbe("tes", 1, 2, planet.getId());
         final var expectedCreatedAt = probe.getCreatedAt();
         final var expectedUpdatedAt = probe.getUpdatedAt();
 
@@ -264,7 +263,7 @@ public class ProbeTest extends UnitTest {
         assertEquals(expectedName, probe.getName());
         assertEquals(expectedCordX, probe.getCordX());
         assertEquals(expectedCordY, probe.getCordY());
-        assertEquals(planet.getId(), probe.getPlanet().getId());
+        assertEquals(planet.getId(), probe.getPlanetId());
         assertEquals(direction, probe.getDirection());
         assertEquals(expectedCreatedAt, probe.getCreatedAt());
         assertTrue(probe.getUpdatedAt().isAfter(expectedUpdatedAt));
@@ -292,7 +291,7 @@ public class ProbeTest extends UnitTest {
 
         final var expectedErrorCount = 1;
 
-        final var probe = Probe.newProbe("tes", 1, 2, planet);
+        final var probe = Probe.newProbe("tes", 1, 2, planet.getId());
 
         final var exception = assertThrows(NotificationException.class,
                 () -> probe.update(expectedName, expectedCordX, expectedCordY, direction));
@@ -312,38 +311,10 @@ public class ProbeTest extends UnitTest {
         final var expectedErrorMessage =  "direction should not be null";
         final var expectedErrorCount = 1;
 
-        final var probe = Probe.newProbe("tes", 1, 2, planet);
+        final var probe = Probe.newProbe("tes", 1, 2, planet.getId());
 
         final var exception = assertThrows(NotificationException.class,
                 () -> probe.update(expectedName, expectedCordX, expectedCordY, direction));
-
-        assertEquals(expectedErrorCount, exception.getErrors().size());
-        assertEquals(expectedErrorMessage, exception.getErrors().get(0).message());
-    }
-
-    @ParameterizedTest
-    @CsvSource({
-            "5,5,4,5",
-            "-5,5,4,5",
-            "-5,5,5,4",
-            "5,5,5,4",
-            "5,5,4,4",
-            "-5,-5,4,4",
-    })
-    public void givenAValidProbe_whenCallsCreateProbeWithCordsGreaterThanPlanet_shouldReturnANotificationException(
-            final int expectedCordX,
-            final int expectedCordY,
-            final int cordYPlanet,
-            final int cordXPlanet
-    ) {
-        final String expectedName = "teste";
-        final Planet planet = Planet.newPlanet(cordYPlanet, cordXPlanet, "tes");
-
-        final var expectedErrorMessage = "does not have this position to land the ship";
-        final var expectedErrorCount = 1;
-
-        final var exception = assertThrows(NotificationException.class,
-                () -> Probe.newProbe(expectedName, expectedCordX, expectedCordY, planet));
 
         assertEquals(expectedErrorCount, exception.getErrors().size());
         assertEquals(expectedErrorMessage, exception.getErrors().get(0).message());
@@ -357,7 +328,7 @@ public class ProbeTest extends UnitTest {
         final Planet planet = Planet.newPlanet(3, 3, "tes");
         final Direction expectedDirection = Direction.UP;
 
-        final var probe = Probe.newProbe(expectedName, expectedCordX, expectedCordY, planet);
+        final var probe = Probe.newProbe(expectedName, expectedCordX, expectedCordY, planet.getId());
 
         assertNotNull(probe);
         assertNotNull(probe.getId());
@@ -366,7 +337,7 @@ public class ProbeTest extends UnitTest {
         assertEquals(expectedCordX, probe.getCordX());
         assertEquals(expectedCordY, probe.getCordY());
         assertEquals(expectedDirection, probe.getDirection());
-        assertEquals(planet.getId(), probe.getPlanet().getId());
+        assertEquals(planet.getId(), probe.getPlanetId());
         assertNotNull(probe.getCreatedAt());
         assertNotNull(probe.getUpdatedAt());
         assertEquals(probe.getCreatedAt(), probe.getUpdatedAt());

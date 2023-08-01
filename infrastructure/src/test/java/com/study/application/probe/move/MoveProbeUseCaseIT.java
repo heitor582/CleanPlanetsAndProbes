@@ -4,6 +4,7 @@ import com.study.IntegrationTest;
 import com.study.domain.exceptions.NotFoundException;
 import com.study.domain.exceptions.NotificationException;
 import com.study.domain.planet.Planet;
+import com.study.domain.planet.PlanetGateway;
 import com.study.domain.probe.Probe;
 import com.study.domain.probe.ProbeGateway;
 import com.study.domain.probe.ProbeID;
@@ -26,6 +27,8 @@ import static org.mockito.Mockito.verify;
 class MoveProbeUseCaseIT extends IntegrationTest{
     @SpyBean
     private ProbeGateway gateway;
+    @SpyBean
+    private PlanetGateway planetGateway;
     @Autowired
     private MoveProbeUseCase useCase;
     @Autowired
@@ -36,7 +39,7 @@ class MoveProbeUseCaseIT extends IntegrationTest{
     @Test
     public void givenAValidCommand_whenCallsMoveProbe_shouldReturnIt() {
         final var planet = planetRepository.saveAndFlush(PlanetJpaEntity.from(Planet.newPlanet(5,5,"teste"))).toAggregate();
-        final var probe = repository.saveAndFlush(ProbeJpaEntity.from(Probe.newProbe("teste",1,1, planet))).toAggregate();
+        final var probe = repository.saveAndFlush(ProbeJpaEntity.from(Probe.newProbe("teste",1,1, planet.getId()))).toAggregate();
         final var expectedId = probe.getId();
 
         final var expectedCordY = 2;
@@ -54,12 +57,13 @@ class MoveProbeUseCaseIT extends IntegrationTest{
         assertEquals(expectedCordX, foundProbe.getCordX());
         assertEquals(expectedCordY, foundProbe.getCordY());
         assertEquals(probe.getDirection(), foundProbe.getDirection());
-        assertEquals(planet, foundProbe.getPlanet());
-        assertEquals(planet.getId(), foundProbe.getPlanet().getId());
+        assertEquals(planet.getId(), foundProbe.getPlanetId());
         assertEquals(probe.getCreatedAt(), foundProbe.getCreatedAt());
         assertTrue(foundProbe.getUpdatedAt().isAfter(foundProbe.getCreatedAt()));
 
+        verify(planetGateway).findBy(planet.getId());
         verify(gateway).findBy(expectedId);
+        verify(gateway).findAllByPlanetId(planet.getId());
         verify(gateway).update(any());
     }
 
@@ -74,7 +78,9 @@ class MoveProbeUseCaseIT extends IntegrationTest{
 
         assertEquals(expectedErrorMessage, exception.getMessage());
 
-        verify(gateway).findBy(eq(id));
+        verify(planetGateway, times(0)).findBy(any());
+        verify(gateway).findBy(any());
+        verify(gateway, times(0)).findAllByPlanetId(any());
         verify(gateway, times(0)).update(any());
     }
 
@@ -84,7 +90,7 @@ class MoveProbeUseCaseIT extends IntegrationTest{
         final var expectedErrorCount = 1;
 
         final var planet = planetRepository.saveAndFlush(PlanetJpaEntity.from(Planet.newPlanet(5,5,"teste"))).toAggregate();
-        final var probe = repository.saveAndFlush(ProbeJpaEntity.from(Probe.newProbe("teste",1,1, planet))).toAggregate();
+        final var probe = repository.saveAndFlush(ProbeJpaEntity.from(Probe.newProbe("teste",1,1, planet.getId()))).toAggregate();
         final var expectedId = probe.getId();
 
         final var command = MoveProbeCommand.with(expectedId.getValue(), "HE");
@@ -94,7 +100,9 @@ class MoveProbeUseCaseIT extends IntegrationTest{
         assertEquals(expectedErrorCount, exception.getErrors().size());
         assertEquals(expectedErrorMessage, exception.getErrors().get(0).message());
 
-        verify(gateway).findBy(eq(expectedId));
+        verify(planetGateway).findBy(planet.getId());
+        verify(gateway).findBy(expectedId);
+        verify(gateway).findAllByPlanetId(planet.getId());
         verify(gateway, times(0)).update(any());
     }
 }

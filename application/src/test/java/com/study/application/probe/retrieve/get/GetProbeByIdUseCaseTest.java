@@ -33,7 +33,7 @@ class GetProbeByIdUseCaseTest extends UseCaseTest {
     @Test
     public void givenAValidId_whenCallsGetProbe_shouldReturnIt() {
         final var planet = Planet.newPlanet(1,1, "teste");
-        final var probe = Probe.newProbe("teste",1,1, planet);
+        final var probe = Probe.newProbe("teste",1,1, planet.getId());
         final var id = probe.getId();
 
         when(gateway.findBy(id)).thenReturn(Optional.of(probe));
@@ -45,8 +45,8 @@ class GetProbeByIdUseCaseTest extends UseCaseTest {
         assertEquals(probe.getCordX(), output.cordX());
         assertEquals(probe.getCordY(), output.cordY());
         assertEquals(probe.getDirection(), output.direction());
-        assertEquals(probe.getPlanet().getId().getValue(), output.planetId());
-        assertEquals(probe.getPlanet(), planet);
+        assertEquals(probe.getPlanetId().getValue(), output.planetId());
+        assertEquals(probe.getPlanetId(), planet.getId());
         assertEquals(probe.getCreatedAt(), output.createdAt());
         assertEquals(probe.getUpdatedAt(), output.updatedAt());
 

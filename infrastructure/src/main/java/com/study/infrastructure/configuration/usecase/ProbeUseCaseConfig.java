@@ -41,7 +41,7 @@ public class ProbeUseCaseConfig {
 
     @Bean
     public UpdateProbeUseCase updateProbeUseCase() {
-        return new DefaultUpdateProbeUseCase(gateway);
+        return new DefaultUpdateProbeUseCase(gateway, planetGateway);
     }
 
     @Bean
@@ -56,6 +56,6 @@ public class ProbeUseCaseConfig {
 
     @Bean
     public MoveProbeUseCase moveProbeUseCase() {
-        return new DefaultMoveProbeUseCase(gateway);
+        return new DefaultMoveProbeUseCase(gateway, planetGateway);
     }
 }

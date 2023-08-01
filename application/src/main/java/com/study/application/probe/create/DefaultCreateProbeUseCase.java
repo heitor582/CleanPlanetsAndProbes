@@ -35,7 +35,11 @@ public class DefaultCreateProbeUseCase extends CreateProbeUseCase{
 
         final Notification notification = Notification.create();
 
-        final Probe probe = notification.validate(() -> Probe.newProbe(name, cordX, cordY, planet));
+        if(planet.getCordX() < Math.abs(cordX) || planet.getCordY() < Math.abs(cordY)){
+            notification.append(new Error("does not have this position to land the ship"));
+        }
+
+        final Probe probe = notification.validate(() -> Probe.newProbe(name, cordX, cordY, planet.getId()));
 
         if (notification.hasError()) {
             throw new NotificationException(

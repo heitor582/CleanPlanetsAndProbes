@@ -33,7 +33,7 @@ class DeleteProbeUseCaseTest extends UseCaseTest {
     @Test
     public void givenAValidId_whenCallsDeletePlanet_shouldBeOk() {
         final var planet = Planet.newPlanet(1,2,"teste");
-        final var probe = Probe.newProbe("teste",1,1, planet);
+        final var probe = Probe.newProbe("teste",1,1,planet.getId());
         final var id = probe.getId();
 
         doNothing().when(gateway).deleteBy(id);
@@ -57,7 +57,7 @@ class DeleteProbeUseCaseTest extends UseCaseTest {
     @Test
     public void givenAValidId_whenCallsDeleteProbeAndGatewayThrowsException_shouldReceiveException() {
         final var planet = Planet.newPlanet(1,2,"teste");
-        final var probe = Probe.newProbe("teste",1,1,  planet);
+        final var probe = Probe.newProbe("teste",1,1,planet.getId());
         final var id = probe.getId();
 
         doThrow(new IllegalStateException("Error")).when(gateway).deleteBy(id);

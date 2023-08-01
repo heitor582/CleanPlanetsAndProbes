@@ -46,7 +46,7 @@ class UpdateProbeUseCaseIT extends IntegrationTest {
         final var expectedCordY = 3;
         final var expectedDirection = Direction.DOWN;
         final var planet = planetRepository.saveAndFlush(PlanetJpaEntity.from(Planet.newPlanet(5,5,"teste"))).toAggregate();
-        final var probe = repository.saveAndFlush(ProbeJpaEntity.from(Probe.newProbe("teste",1,1, planet))).toAggregate();
+        final var probe = repository.saveAndFlush(ProbeJpaEntity.from(Probe.newProbe("teste",1,1, planet.getId()))).toAggregate();
         final var expectedId = probe.getId();
 
         final var command = UpdateProbeCommand.with(expectedId.getValue(), expectedName, expectedCordX, expectedCordY, expectedDirection);
@@ -62,8 +62,7 @@ class UpdateProbeUseCaseIT extends IntegrationTest {
         assertEquals(expectedCordX, foundProbe.getCordX());
         assertEquals(expectedCordY, foundProbe.getCordY());
         assertEquals(expectedDirection, foundProbe.getDirection());
-        assertEquals(planet, foundProbe.getPlanet());
-        assertEquals(planet.getId(), foundProbe.getPlanet().getId());
+        assertEquals(planet.getId(), foundProbe.getPlanetId());
         assertEquals(probe.getCreatedAt(), foundProbe.getCreatedAt());
         assertTrue(foundProbe.getUpdatedAt().isAfter(foundProbe.getCreatedAt()));
 
@@ -100,7 +99,7 @@ class UpdateProbeUseCaseIT extends IntegrationTest {
         final var expectedCordY = 3;
         final var expectedErrorCount = 1;
         final var planet = planetRepository.saveAndFlush(PlanetJpaEntity.from(Planet.newPlanet(5,5,"teste"))).toAggregate();
-        final var probe = repository.saveAndFlush(ProbeJpaEntity.from(Probe.newProbe("teste",1,1, planet))).toAggregate();
+        final var probe = repository.saveAndFlush(ProbeJpaEntity.from(Probe.newProbe("teste",1,1, planet.getId()))).toAggregate();
         final var expectedId = probe.getId();
         final var command = UpdateProbeCommand.with(expectedId.getValue(), name, expectedCordX, expectedCordY, Direction.UP);
 

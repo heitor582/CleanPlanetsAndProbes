@@ -54,8 +54,7 @@ class CreateProbeUseCaseIT extends IntegrationTest {
         assertEquals(expectedCordX, probe.getCordX());
         assertEquals(expectedCordY, probe.getCordY());
         assertEquals(Direction.UP, probe.getDirection());
-        assertEquals(expectedPlanet, probe.getPlanet());
-        assertEquals(expectedPlanet.getId(), probe.getPlanet().getId());
+        assertEquals(expectedPlanet.getId(), probe.getPlanetId());
         assertNotNull(probe.getCreatedAt());
         assertNotNull(probe.getUpdatedAt());
 

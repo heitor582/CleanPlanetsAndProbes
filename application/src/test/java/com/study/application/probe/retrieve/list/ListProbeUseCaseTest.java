@@ -34,8 +34,8 @@ class ListProbeUseCaseTest extends UseCaseTest {
         // given
         final var planet = Planet.newPlanet(1,1, "teste2");
         final var members = List.of(
-                Probe.newProbe("teste1",1,1, planet),
-                Probe.newProbe("teste2",1,1, planet)
+                Probe.newProbe("teste1",1,1, planet.getId()),
+                Probe.newProbe("teste2",1,1, planet.getId())
         );
 
         final var expectedPage = 0;

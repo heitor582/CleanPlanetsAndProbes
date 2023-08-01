@@ -4,6 +4,7 @@ import com.study.application.UseCaseTest;
 import com.study.domain.exceptions.NotFoundException;
 import com.study.domain.exceptions.NotificationException;
 import com.study.domain.planet.Planet;
+import com.study.domain.planet.PlanetGateway;
 import com.study.domain.probe.Direction;
 import com.study.domain.probe.Probe;
 import com.study.domain.probe.ProbeGateway;
@@ -31,6 +32,8 @@ import static org.mockito.Mockito.when;
 class UpdateProbeUseCaseTest extends UseCaseTest {
     @Mock
     private ProbeGateway gateway;
+    @Mock
+    private PlanetGateway planetGateway;
     @InjectMocks
     private DefaultUpdateProbeUseCase useCase;
 
@@ -46,11 +49,12 @@ class UpdateProbeUseCaseTest extends UseCaseTest {
         final var expectedCordY = 3;
         final var expectedDirection = Direction.DOWN;
         final var planet = Planet.newPlanet(5,5,"teste");
-        final var probe = Probe.newProbe("teste",1,1,  planet);
+        final var probe = Probe.newProbe("teste",1,1, planet.getId());
         final var expectedId = probe.getId();
 
         final var command = UpdateProbeCommand.with(expectedId.getValue(), expectedName, expectedCordX, expectedCordY, expectedDirection);
 
+        when(planetGateway.findBy(planet.getId())).thenReturn(Optional.of(planet));
         when(gateway.findBy(expectedId)).thenReturn(Optional.of(probe));
         when(gateway.update(any())).thenAnswer(returnsFirstArg());
 
@@ -58,6 +62,7 @@ class UpdateProbeUseCaseTest extends UseCaseTest {
 
         assertEquals(output.id(), probe.getId().getValue());
 
+        verify(planetGateway).findBy(planet.getId());
         verify(gateway).update(argThat(cmd ->
                 Objects.nonNull(cmd.getId())
                         && Objects.equals(expectedName, cmd.getName())
@@ -101,10 +106,11 @@ class UpdateProbeUseCaseTest extends UseCaseTest {
         final var expectedCordY = 3;
         final var expectedErrorCount = 1;
         final var planet = Planet.newPlanet(5,5,"teste");
-        final var probe = Probe.newProbe("teste",1,1,  planet);
+        final var probe = Probe.newProbe("teste",1,1, planet.getId());
         final var expectedId = probe.getId();
         final var command = UpdateProbeCommand.with(expectedId.getValue(), name, expectedCordX, expectedCordY, Direction.UP);
 
+        when(planetGateway.findBy(planet.getId())).thenReturn(Optional.of(planet));
         when(gateway.findBy(expectedId)).thenReturn(Optional.of(probe));
 
         final var exception = assertThrows(NotificationException.class, () -> useCase.execute(command));

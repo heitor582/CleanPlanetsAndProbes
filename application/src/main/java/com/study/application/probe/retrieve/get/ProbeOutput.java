@@ -22,7 +22,7 @@ public record ProbeOutput(
                 probe.getCordX(),
                 probe.getCordY(),
                 probe.getDirection(),
-                probe.getPlanet().getId().getValue(),
+                probe.getPlanetId().getValue(),
                 probe.getCreatedAt(),
                 probe.getUpdatedAt()
         );

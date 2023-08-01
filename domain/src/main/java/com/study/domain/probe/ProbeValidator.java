@@ -50,7 +50,7 @@ public class ProbeValidator extends Validator {
             this.validationHandler().append(new Error("direction should not be null"));
         }
     }
-
+  
     private void checkCordsConstraints() {
         final int cordX = Math.abs(this.probe.getCordX());
         final int cordY = Math.abs(this.probe.getCordY());
@@ -62,12 +62,6 @@ public class ProbeValidator extends Validator {
 
         if(cordX < CORD_Y_X_MIN || cordX > CORD_Y_X_MAX) {
             this.validationHandler().append(new Error("coordinate X must be between 1 and 1000"));
-            return;
-        }
-
-        final Planet planet = this.probe.getPlanet();
-        if(planet.getCordX() < cordX || planet.getCordY() < cordY){
-            this.validationHandler().append(new Error("does not have this position to land the ship"));
         }
     }
 }
