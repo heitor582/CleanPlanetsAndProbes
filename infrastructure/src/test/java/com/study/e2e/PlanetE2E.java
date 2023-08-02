@@ -176,7 +176,7 @@ public class PlanetE2E extends E2ETest {
     }
 
     @Test
-    public void givenAValidCommand_whenCallsUpdateGenre_shouldReturnGenreId() throws Exception {
+    public void givenAValidCommand_whenCallsUpdatePlanet_shouldReturnGenreId() throws Exception {
         //given
         final var expectedName = "teste";
         final var expectedCordX = 3;
@@ -218,7 +218,7 @@ public class PlanetE2E extends E2ETest {
             "tes,1001,3,coordinate X must be between 1 and 1000",
             "tes,3,1001,coordinate Y must be between 1 and 1000",
     })
-    public void givenAInvalidRequest_whenCallsUpdateGenre_NotificationException(
+    public void givenAInvalidRequest_whenCallsUpdatePlanet_NotificationException(
             final String expectedName,
             final int expectedCordX,
             final int expectedCordY,
@@ -252,7 +252,7 @@ public class PlanetE2E extends E2ETest {
     }
 
     @Test
-    public void givenAValidId_whenCallsDeleteGenreById_shouldBeOk() throws Exception {
+    public void givenAValidId_whenCallsDeletePlanetById_shouldBeOk() throws Exception {
         //given
         final var planet = Planet.newPlanet(3, 3, "teste");
         final var expectedId = repository.saveAndFlush(PlanetJpaEntity.from(planet)).getId();
@@ -271,7 +271,7 @@ public class PlanetE2E extends E2ETest {
     }
 
     @Test
-    public void givenValidParams_whenCallsListGenres_shouldReturnCategories() throws Exception {
+    public void givenValidParams_whenCallsListPlanets_shouldReturnCategories() throws Exception {
         final var expectedPage = 0;
         final var expectedPerPage = 10;
         final var expectedTerms = "tes";

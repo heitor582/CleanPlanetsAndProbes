@@ -53,12 +53,6 @@ testCodeCoverageReport {
             destination file("$rootDir/build/reports/jacoco/test/")
         }
     }
-
-    afterEvaluate {
-        classDirectories.setFrom(files(classDirectories.files.collect {
-            fileTree(dir: it, exclude: '**/configuration')
-        }))
-    }
 }
 
 tasks.named("jacocoTestReport"){

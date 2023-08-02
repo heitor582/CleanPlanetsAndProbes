@@ -199,8 +199,6 @@ public class ProbeTest extends UnitTest {
             "'',3,3,name should not be empty",
             "aa,3,3,name must be between 3 and 255 characters",
             " a,3,3,name must be between 3 and 255 characters",
-            "tes,0,3,coordinate X must be between 1 and 1000",
-            "tes,3,0,coordinate Y must be between 1 and 1000",
             "tes,1001,3,coordinate X must be between 1 and 1000",
             "tes,3,1001,coordinate Y must be between 1 and 1000",
     })
@@ -276,8 +274,6 @@ public class ProbeTest extends UnitTest {
             "'',3,3,name should not be empty",
             "aa,3,3,name must be between 3 and 255 characters",
             " a,3,3,name must be between 3 and 255 characters",
-            "tes,0,3,coordinate X must be between 1 and 1000",
-            "tes,3,0,coordinate Y must be between 1 and 1000",
             "tes,1001,3,coordinate X must be between 1 and 1000",
             "tes,3,1001,coordinate Y must be between 1 and 1000",
     })

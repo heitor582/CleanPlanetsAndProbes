@@ -81,14 +81,46 @@ public class ProbeJpaEntity {
 
     public Probe toAggregate() {
         return Probe.with(
-                ProbeID.from(this.id),
-                this.cordX,
-                this.cordY,
-                this.name,
-                this.direction,
-                this.planet.toAggregate(),
-                this.createdAt,
-                this.updatedAt
+                ProbeID.from(this.getId()),
+                this.getCordX(),
+                this.getCordY(),
+                this.getName(),
+                this.getDirection(),
+                this.getPlanet().toAggregate(),
+                this.getCreatedAt(),
+                this.getUpdatedAt()
         );
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public int getCordY() {
+        return cordY;
+    }
+
+    public int getCordX() {
+        return cordX;
+    }
+
+    public Direction getDirection() {
+        return direction;
+    }
+
+    public PlanetJpaEntity getPlanet() {
+        return planet;
+    }
+
+    public Instant getCreatedAt() {
+        return createdAt;
+    }
+
+    public Instant getUpdatedAt() {
+        return updatedAt;
     }
 }
