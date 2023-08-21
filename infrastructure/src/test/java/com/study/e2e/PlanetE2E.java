@@ -176,7 +176,7 @@ public class PlanetE2E extends E2ETest {
     }
 
     @Test
-    public void givenAValidCommand_whenCallsUpdatePlanet_shouldReturnGenreId() throws Exception {
+    public void givenAValidCommand_whenCallsUpdatePlanet_shouldReturnPlanetId() throws Exception {
         //given
         final var expectedName = "teste";
         final var expectedCordX = 3;

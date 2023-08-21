@@ -217,7 +217,7 @@ public class ProbeApiIT {
     }
 
     @Test
-    public void givenAValidCommand_whenCallsUpdateProbe_shouldReturnGenreId() throws Exception {
+    public void givenAValidCommand_whenCallsUpdateProbe_shouldReturnProbeId() throws Exception {
         //given
         final Planet planet = Planet.newPlanet(5,5,"name");
 

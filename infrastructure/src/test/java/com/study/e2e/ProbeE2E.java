@@ -203,7 +203,7 @@ public class ProbeE2E extends E2ETest {
     }
 
     @Test
-    public void givenAValidCommand_whenCallsUpdateProbe_shouldReturnGenreId() throws Exception {
+    public void givenAValidCommand_whenCallsUpdateProbe_shouldReturnProbeId() throws Exception {
         //given
         final Planet planet = planetRepository.saveAndFlush(
                 PlanetJpaEntity.from(Planet.newPlanet(5,5,"name"))
@@ -249,7 +249,7 @@ public class ProbeE2E extends E2ETest {
             "LMM,-1,1,LEFT",
             "RRMM,1,-1,DOWN",
     })
-    public void givenAValidCommand_whenCallsMoveProbe_shouldReturnGenreId(
+    public void givenAValidCommand_whenCallsMoveProbe_shouldReturnProbeId(
             final String requestCommand,
             final int expectedCordX,
             final int expectedCordY,
