@@ -8,8 +8,15 @@ services:
       - "8080:8080"
     depends_on:
       - postgres
+      - filebeat
     env_file:
       - .env
+    networks:
+      - postgres_network
+      - filebeat_network
+    labels:
+      filebeat_collector: true
+
   postgres:
     image: postgres
     container_name: postgres
@@ -19,7 +26,65 @@ services:
       POSTGRES_USER: planets_probe
       POSTGRES_PASSWORD: planets_probe
       POSTGRES_DB: planets_probe
+    networks:
+      - postgres_network
+
+  filebeat:
+    container_name: probe_filebeat
+    image: docker.elastic.co/beats/filebeat:7.17.9
+    volumes:
+      - /var/lib/docker/containers:/var/lib/docker/containers:ro           # Docker logs
+      - /var/run/docker.sock:/var/run/docker.sock:ro                       # Additional information about containers
+      - ./filebeat/filebeat.yml:/usr/share/filebeat/filebeat.yml:ro # Configuration file
+      - ./.docker/filebeat:/usr/share/filebeat/data:rw                    # Persistence data
+    user: root                                                             # Allow access to log files and docker.sock
+    restart: on-failure
+    networks:
+      - filebeat_network
+      - elastic_network
+
+  elasticsearch:
+    image: docker.elastic.co/elasticsearch/elasticsearch:7.17.9
+    container_name: elk_es01
+    restart: on-failure
+    volumes:
+      - ./.docker/es01:/usr/share/elasticsearch/data
+    environment:
+      - "discovery.type=single-node"
+    ports:
+      - '9200:9200'
+      - '9300:9300'
+    networks:
+      - elastic_network
+
+  kibana:
+    image: docker.elastic.co/kibana/kibana:7.17.9
+    container_name: elk_kibana
+    restart: on-failure
+    ports:
+      - '5601:5601'
+    environment:
+      - ELASTICSEARCH_URL=http://elasticsearch:9200
+    depends_on:
+      - elasticsearch
+    networks:
+      - elastic_network
+
+  logstash:
+    image: docker.elastic.co/logstash/logstash:7.17.9
+    container_name: elk_logstash
+    restart: on-failure
+    volumes:
+      - ./logstash/pipeline:/usr/share/logstash/pipeline:ro
+    ports:
+      - "25826:25826"
+      - "5044:5044"
+    environment:
+      LS_JAVA_OPTS: "-Xmx256m -Xms256m"
+    networks:
+      - elastic_network
 
 networks:
-  default:
-    driver: bridge
+  postgres_network:
+  elastic_network:
+  filebeat_network:

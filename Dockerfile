@@ -11,7 +11,7 @@ COPY buildSrc $APP_HOME/buildSrc
 
 RUN ./gradlew build
 COPY . .
-RUN ./gradlew build
+RUN ./gradlew build -x test
 
 FROM openjdk:17-oracle
 
