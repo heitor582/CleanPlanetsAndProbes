@@ -114,7 +114,6 @@ class UpdatePlanetUseCaseTest extends UseCaseTest {
 
         final var command = UpdatePlanetCommand.with(expectedId.getValue(), expectedName, expectedCordX, expectedCordY);
 
-
         when(gateway.findBy(expectedId)).thenReturn(Optional.empty());
 
         final var exception = assertThrows(NotFoundException.class, () -> useCase.execute(command));

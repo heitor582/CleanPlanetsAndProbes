@@ -8,10 +8,12 @@ import com.study.application.planet.delete.DeletePlanetUseCase;
 import com.study.application.planet.retrieve.get.GetPlanetByIdUseCase;
 import com.study.application.planet.retrieve.get.PlanetOutput;
 import com.study.application.planet.retrieve.list.ListPlanetUseCase;
+import com.study.application.planet.retrieve.list.PlanetListOutput;
 import com.study.application.planet.update.UpdatePlanetUseCase;
 import com.study.application.planet.update.UpdatePlanetOutput;
 import com.study.domain.exceptions.NotFoundException;
 import com.study.domain.exceptions.NotificationException;
+import com.study.domain.pagination.Pagination;
 import com.study.domain.planet.Planet;
 import com.study.domain.planet.PlanetID;
 import com.study.domain.validation.Error;
@@ -28,6 +30,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
+import java.util.List;
 import java.util.Objects;
 
 import static org.hamcrest.Matchers.equalTo;
@@ -47,7 +50,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@ControllerTest(controllers = PlanetApiIT.class)
+@ControllerTest(controllers = PlanetAPI.class)
 public class PlanetApiIT {
     @Autowired
     private MockMvc mvc;
@@ -149,7 +152,7 @@ public class PlanetApiIT {
         final var expectedCordX = 3;
         final var expectedCordY = 3;
 
-        final Planet planet = Planet.newPlanet(5, 5, "name");
+        final Planet planet = Planet.newPlanet(expectedCordY, expectedCordX, expectedName);
         final Long expectedId = planet.getId().getValue();
 
         when(getPlanetByIdUseCase.execute(expectedId)).thenReturn(PlanetOutput.from(planet));
@@ -179,7 +182,7 @@ public class PlanetApiIT {
         final var expectedId = PlanetID.from(1L);
         final var expectedErrorMessage = "Planet with ID %s was not found".formatted(expectedId.getValue());
 
-        when(getPlanetByIdUseCase.execute(expectedId.getValue())).thenThrow(NotFoundException.with(new Error(expectedErrorMessage)));
+        when(getPlanetByIdUseCase.execute(expectedId.getValue())).thenThrow(NotFoundException.with(Planet.class, expectedId));
 
         //when
         final var request = MockMvcRequestBuilders.get("%s/{id}".formatted(API_URL), expectedId.getValue())
@@ -255,7 +258,7 @@ public class PlanetApiIT {
         when(updatePlanetUseCase.execute(any())).thenThrow(NotificationException.with(new Error(expectedErrorMessage)));
 
         // when
-        final var request = put("%s/{id}".formatted(API_URL), expectedId)
+        final var request = put("%s/{id}".formatted(API_URL), expectedId.getValue())
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(this.mapper.writeValueAsString(command));
 
@@ -306,6 +309,9 @@ public class PlanetApiIT {
         final var expectedDirection = "asc";
         final var expectedTotal = 1;
         final var planet = Planet.newPlanet(3, 3, "teste");
+
+        when(listPlanetUseCase.execute(any())).thenReturn(new Pagination<>(expectedPage, expectedPerPage, expectedTotal,
+                List.of(PlanetListOutput.from(planet))));
 
         final var request = MockMvcRequestBuilders.get(API_URL)
                 .queryParam("page", String.valueOf(expectedPage))

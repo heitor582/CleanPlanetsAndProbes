@@ -2,18 +2,25 @@ package com.study.infrastructure.api;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.study.ControllerTest;
-import com.study.E2ETest;
 import com.study.application.probe.create.CreateProbeOutput;
 import com.study.application.probe.create.CreateProbeUseCase;
 import com.study.application.probe.delete.DeleteProbeUseCase;
+import com.study.application.probe.move.MoveProbeOutput;
 import com.study.application.probe.move.MoveProbeUseCase;
 import com.study.application.probe.retrieve.get.GetProbeByIdUseCase;
+import com.study.application.probe.retrieve.get.ProbeOutput;
 import com.study.application.probe.retrieve.list.ListProbeUseCase;
+import com.study.application.probe.retrieve.list.ProbeListOutput;
+import com.study.application.probe.update.UpdateProbeOutput;
 import com.study.application.probe.update.UpdateProbeUseCase;
+import com.study.domain.exceptions.NotFoundException;
+import com.study.domain.exceptions.NotificationException;
+import com.study.domain.pagination.Pagination;
 import com.study.domain.planet.Planet;
 import com.study.domain.planet.PlanetID;
 import com.study.domain.probe.Direction;
 import com.study.domain.probe.Probe;
+import com.study.domain.validation.Error;
 import com.study.infrastructure.probe.models.CreateProbeRequest;
 import com.study.infrastructure.probe.models.MoveProbeRequest;
 import com.study.infrastructure.probe.models.UpdateProbeRequest;
@@ -28,12 +35,12 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
+import java.util.List;
 import java.util.Objects;
 
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.nullValue;
-import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.argThat;
 import static org.mockito.ArgumentMatchers.eq;
@@ -49,7 +56,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @ControllerTest(controllers = ProbeAPI.class)
-public class ProbeApiIT extends E2ETest {
+public class ProbeApiIT {
     @Autowired
     private MockMvc mvc;
     @Autowired
@@ -127,6 +134,8 @@ public class ProbeApiIT extends E2ETest {
 
         final var command = new CreateProbeRequest(expectedName, expectedCordX, expectedCordY, planetId);
 
+        when(createProbeUseCase.execute(any())).thenThrow(NotificationException.with(new Error(expectedErrorMessage)));
+
         //then
         final var request = MockMvcRequestBuilders.post(API_URL)
                 .contentType(MediaType.APPLICATION_JSON)
@@ -162,6 +171,8 @@ public class ProbeApiIT extends E2ETest {
         final var probe = Probe.newProbe(expectedName, expectedCordX, expectedCordY, planet);
         final var expectedId = probe.getId().getValue();
 
+        when(getProbeByIdUseCase.execute(any())).thenReturn(ProbeOutput.from(probe));
+
         //when
         final var request = MockMvcRequestBuilders.get("%s/{id}".formatted(API_URL), expectedId)
                 .accept(MediaType.APPLICATION_JSON);
@@ -188,6 +199,8 @@ public class ProbeApiIT extends E2ETest {
         //given
         final var expectedId = PlanetID.from(1L);
         final var expectedErrorMessage = "Probe with ID %s was not found".formatted(expectedId.getValue());
+
+        when(getProbeByIdUseCase.execute(any())).thenThrow(NotFoundException.with(Probe.class, expectedId));
 
         //when
         final var request = MockMvcRequestBuilders.get("%s/{id}".formatted(API_URL), expectedId.getValue())
@@ -218,6 +231,8 @@ public class ProbeApiIT extends E2ETest {
 
         final var command = new UpdateProbeRequest(expectedName, expectedCordX, expectedCordY, expectedDirection);
 
+        when(updateProbeUseCase.execute(any())).thenReturn(UpdateProbeOutput.from(expectedId));
+
         // when
         final var request = put("%s/{id}".formatted(API_URL), expectedId)
                 .contentType(MediaType.APPLICATION_JSON)
@@ -241,18 +256,15 @@ public class ProbeApiIT extends E2ETest {
 
     @ParameterizedTest
     @CsvSource({
-            "LRM,1,2,UP",
-            "RLM,1,2,UP",
-            "MM,1,3,UP",
-            "RMM,3,1,RIGHT",
-            "LMM,-1,1,LEFT",
-            "RRMM,1,-1,DOWN",
+            "LRM",
+            "RLM",
+            "MM",
+            "RMM",
+            "LMM",
+            "RRMM",
     })
-    public void givenAValidCommand_whenCallsMoveProbe_shouldReturnGenreId(
-            final String requestCommand,
-            final int expectedCordX,
-            final int expectedCordY,
-            final Direction expectedDirection
+    public void givenAValidCommand_whenCallsMoveProbe_shouldReturnProbeId(
+            final String requestCommand
     ) throws Exception {
         //given
         final Planet planet = Planet.newPlanet(5,5,"name");
@@ -261,6 +273,8 @@ public class ProbeApiIT extends E2ETest {
         final var expectedId = probe.getId().getValue();
 
         final var command = new MoveProbeRequest(requestCommand);
+
+        when(moveProbeUseCase.execute(any())).thenReturn(MoveProbeOutput.from(expectedId));
 
         // when
         final var request = patch("%s/{id}".formatted(API_URL), expectedId)
@@ -274,10 +288,6 @@ public class ProbeApiIT extends E2ETest {
                 .andExpect(MockMvcResultMatchers.status().isOk())
                 .andExpect(MockMvcResultMatchers.header().string("Content-Type", MediaType.APPLICATION_JSON_VALUE))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.id", Matchers.equalTo(expectedId.intValue())));
-
-        assertEquals(expectedCordX, probe.getCordX());
-        assertEquals(expectedCordY, probe.getCordY());
-        assertEquals(expectedDirection, probe.getDirection());
 
         verify(moveProbeUseCase).execute(argThat(cmd ->
                 Objects.equals(requestCommand, cmd.command())
@@ -308,6 +318,8 @@ public class ProbeApiIT extends E2ETest {
         final var expectedId = probe.getId().getValue();
 
         final var command = new UpdateProbeRequest(expectedName, expectedCordX, expectedCordY, expectedDirection);
+
+        when(updateProbeUseCase.execute(any())).thenThrow(NotificationException.with(new Error(expectedErrorMessage)));
 
         // when
         final var request = put("%s/{id}".formatted(API_URL), expectedId)
@@ -364,6 +376,8 @@ public class ProbeApiIT extends E2ETest {
 
         final var probe = Probe.newProbe("teste", 1, 1, planet);
         final var expectedId = probe.getId().getValue();
+
+        when(listProbeUseCase.execute(any())).thenReturn(new Pagination(expectedPage, expectedPerPage, expectedTotal, List.of(ProbeListOutput.from(probe))));
 
         final var request = MockMvcRequestBuilders.get(API_URL)
                 .queryParam("page", String.valueOf(expectedPage))
