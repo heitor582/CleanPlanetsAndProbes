@@ -27,14 +27,17 @@ class CreatePlanetUseCaseIT extends IntegrationTest {
 
     @Test
     public void givenAValidCommand_whenCallsCreatePlanet_shouldReturnIt() {
+        //given
         final var expectedName = "teste";
         final var expectedCordX = 3;
         final var expectedCordY = 3;
 
         final var command = CreatePlanetCommand.with(expectedName, expectedCordX, expectedCordY);
 
+        //when
         final var output = useCase.execute(command);
-
+        
+        //then
         final var planet = repository.findById(output.id()).get();
 
         assertNotNull(planet.getId());
