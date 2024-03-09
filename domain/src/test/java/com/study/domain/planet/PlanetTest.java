@@ -15,12 +15,15 @@ public class PlanetTest extends UnitTest {
 
     @Test
     public void givenAValidParams_whenCallsNewPlanet_thenInstantiateIt() {
+        //given
         final var expectedName = "teste";
         final int expectedCordX = 5;
         final int expectedCordY = 3;
 
+        //when
         final var planet = Planet.newPlanet(expectedCordY, expectedCordX, expectedName);
 
+        //then
         assertNotNull(planet);
         assertNotNull(planet.getId());
 
